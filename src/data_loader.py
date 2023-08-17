@@ -2,10 +2,14 @@ import os
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 
 from PIL import Image
 
+import torch as torch
 from torch.utils.data import DataLoader, Dataset
+
+from src.visualize import json_config_to_feature_extraction_dict
 
 class ImageDataset(Dataset):
     def __init__(self, imgs_paths, idxs, transform):
@@ -21,6 +25,26 @@ class ImageDataset(Dataset):
         if self.transform:
             img = self.transform(img)
         return img
+
+class ImagefrmiDataset(Dataset):
+    def __init__(self, imgs_paths, fmri_path, idxs, transform):
+        # Acquisisco solo le immagini dello split specifico (train, val, test)
+        self.imgs_paths = np.array(imgs_paths)[idxs]
+        self.transform = transform
+        # Acquisisco solo i fmri dello split specifico (train, val, test)
+        self.fmri = np.load(fmri_path)[idxs]
+    def __len__(self):
+        return len(self.imgs_paths)
+    def __getitem__(self, idx):
+        # Load the image
+        img_path = self.imgs_paths[idx]
+        img = Image.open(img_path).convert('RGB')
+        # Preprocess the image and send it to the chosen device ('cpu' or 'cuda')
+        if self.transform:
+            img = self.transform(img)
+        # Load the fmri vector
+        fmri = torch.Tensor(self.fmri[idx])
+        return img, fmri
 
 class argObj:
     """
@@ -98,6 +122,17 @@ class argObj:
         
         # fsaverage surfaces dir 
         self.fsaverage_surface_dir = os.path.join(self.data_home_dir, 'fsaverage_surface')
+        
+        # ROI advanced masks DIR
+        
+        self.roi_dir_enhanced = os.path.join(self.data_dir, 'roi_masks_enhanced')
+        if not os.path.isdir(self.roi_dir_enhanced) and save:
+            os.makedirs(self.roi_dir_enhanced)
+            os.makedirs(os.path.join(self.roi_dir_enhanced, 'roi_classes_masks'))
+            os.makedirs(os.path.join(self.roi_dir_enhanced, 'roi_masks'))
+            os.makedirs(os.path.join(self.roi_dir_enhanced, 'unknown_masks'))
+            
+        self.roi_dir_enhanced_df = os.path.join(self.roi_dir_enhanced, 'roi_df')
         
     def images_idx_splitter(self, train_percentage):
         """
@@ -185,5 +220,130 @@ class data_loaders_stimuli_fmri:
     rh_fmri_val = rh_fmri[self.idxs_val]
     # del lh_fmri, rh_fmri
     return lh_fmri_train, lh_fmri_val, rh_fmri_train, rh_fmri_val
-  
-  
+
+  def images_fmri_dataloader(self, batch_size, transform):
+    train_dataloader_lh = DataLoader(
+        ImagefrmiDataset(self.train_imgs_paths, self.lh_fmri, self.idxs_train, transform), 
+        batch_size=batch_size
+    )
+    val_dataloader_lh = DataLoader(
+        ImagefrmiDataset(self.train_imgs_paths, self.lh_fmri, self.idxs_val, transform), 
+        batch_size=batch_size
+    )
+    test_dataloader_lh = DataLoader(
+        ImagefrmiDataset(self.test_imgs_paths, self.lh_fmri, self.idxs_test, transform), 
+        batch_size=batch_size
+    )
+    
+    train_dataloader_rh = DataLoader(
+        ImagefrmiDataset(self.train_imgs_paths, self.rh_fmri, self.idxs_train, transform), 
+        batch_size=batch_size
+    )
+    val_dataloader_rh = DataLoader(
+        ImagefrmiDataset(self.train_imgs_paths, self.rh_fmri, self.idxs_val, transform), 
+        batch_size=batch_size
+    )
+    test_dataloader_rh = DataLoader(
+        ImagefrmiDataset(self.test_imgs_paths, self.rh_fmri, self.idxs_test, transform), 
+        batch_size=batch_size
+    )
+    
+    return train_dataloader_lh, val_dataloader_lh, test_dataloader_lh, train_dataloader_rh, val_dataloader_rh, test_dataloader_rh
+
+def transform_layers_test(layers):
+    """
+    Function used when creating the submission name
+    """
+    transformed_layers = []
+    for layer in layers:
+        # layer[0] to select only the layer and not the other params
+        if isinstance(layer, list):
+            transformed_layers.append('&'.join(layer))
+        else:
+            transformed_layers.append(layer)
+    return transformed_layers
+
+def transform_layers(layers):
+    """
+    Function used when creating the submission name
+    """
+    transformed_layers = []
+    for layer in layers:
+        # layer[0] to select only the layer and not the other params
+        if isinstance(layer[0], list):
+            transformed_layers.append('&'.join(layer[0]))
+        else:
+            transformed_layers.append(layer[0])
+    return transformed_layers
+
+# class masks_loader:
+#     def __init__(self, 
+#                 roi_masks_enhanced_path):
+
+#         self.roi_masks_enhanced_path = roi_masks_enhanced_path
+        
+#     def load_roi_masks_challenge_from_list_of_ROI(self, final_extraction_config, model_layer_id, verbose=True):
+#         """
+#         This function loads the masks
+#         """
+#         roi_masks_enhanced_path_df =  os.path.join(self.roi_masks_enhanced_path, 'roi_df')
+#         lh_roi_challenge_onehot = pd.read_csv(os.path.join(roi_masks_enhanced_path_df, 'lh_challenge_onehot.csv'))
+#         rh_roi_challenge_onehot = pd.read_csv(os.path.join(roi_masks_enhanced_path_df, 'rh_challenge_onehot.csv'))
+#         # i verify in config dict which rois are associated with the current layer
+#         keys_with_target_value = [key for key, value in final_extraction_config.items() if value == model_layer_id]
+#         print(f"ROIs which best-perform with the current layer: {keys_with_target_value}")
+#         ### create the voxel mask for the current model-layer-specific set of ROIs
+#         # subset of ROIs from the one-hot encoded dataframe
+#         lh_roi_challenge_onehot_subset = lh_roi_challenge_onehot[keys_with_target_value]
+#         rh_roi_challenge_onehot_subset = rh_roi_challenge_onehot[keys_with_target_value]
+#         lh_mask = []
+#         rh_mask = []
+#         for index, row in lh_roi_challenge_onehot_subset.iterrows():
+#             if row.sum() == 1:
+#                 lh_mask.append(1)
+#             elif row.sum() == 0:
+#                 lh_mask.append(0)
+#             else:
+#                 raise ValueError(f"Errore: la riga {index} ha più di un 1.")
+#         for index, row in rh_roi_challenge_onehot_subset.iterrows():
+#             if row.sum() == 1:
+#                 rh_mask.append(1)
+#             elif row.sum() == 0:
+#                 rh_mask.append(0)
+#             else:
+#                 raise ValueError(f"Errore: la riga {index} ha più di un 1.")
+#         return np.array(lh_mask), np.array(rh_mask)
+    
+def load_roi_masks_challenge_from_list_of_ROI(roi_masks_enhanced_path, final_extraction_config, model_layer_id, verbose=True):
+        """
+        This function loads the masks
+        """
+        roi_masks_enhanced_path_df =  os.path.join(roi_masks_enhanced_path, 'roi_df')
+        lh_roi_challenge_onehot = pd.read_csv(os.path.join(roi_masks_enhanced_path_df, 'lh_challenge_onehot.csv'))
+        rh_roi_challenge_onehot = pd.read_csv(os.path.join(roi_masks_enhanced_path_df, 'rh_challenge_onehot.csv'))
+        # i verify in config dict which rois are associated with the current layer
+        # mantain only the model-layer params
+        #final_extraction_config_reduced = {key: value[:2] if isinstance(value, list) else value for key, value in final_extraction_config.items()}
+        keys_with_target_value = [key for key, value in final_extraction_config.items() if value == model_layer_id]
+        print(f"ROIs which best-perform with the current layer: {keys_with_target_value}")
+        ### create the voxel mask for the current model-layer-specific set of ROIs
+        # subset of ROIs from the one-hot encoded dataframe
+        lh_roi_challenge_onehot_subset = lh_roi_challenge_onehot[keys_with_target_value]
+        rh_roi_challenge_onehot_subset = rh_roi_challenge_onehot[keys_with_target_value]
+        lh_mask = []
+        rh_mask = []
+        for index, row in lh_roi_challenge_onehot_subset.iterrows():
+            if row.sum() == 1:
+                lh_mask.append(1)
+            elif row.sum() == 0:
+                lh_mask.append(0)
+            else:
+                raise ValueError(f"Errore: la riga {index} ha più di un 1.")
+        for index, row in rh_roi_challenge_onehot_subset.iterrows():
+            if row.sum() == 1:
+                rh_mask.append(1)
+            elif row.sum() == 0:
+                rh_mask.append(0)
+            else:
+                raise ValueError(f"Errore: la riga {index} ha più di un 1.")
+        return np.array(lh_mask), np.array(rh_mask)

@@ -1,0 +1,130 @@
+{
+    "V1v": [
+        "ZFNet",
+        "features.stage2.unit1.activ"
+    ],
+    "V1d": [
+        "ZFNet",
+        "features.stage2.unit1.activ"
+    ],
+    "V2v": [
+        "alexnet",
+        "features.7"
+    ],
+    "V2d": [
+        "alexnet",
+        "features.7"
+    ],
+    "V3v": [
+        "alexnet",
+        "features.7"
+    ],
+    "V3d": [
+        "alexnet",
+        "features.7"
+    ],
+    "hV4": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "EBA": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "FBA-1": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "FBA-2": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "mTL-bodies": NaN,
+    "OFA": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "FFA-1": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "FFA-2": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "mTL-faces": NaN,
+    "aTL-faces": NaN,
+    "OPA": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "PPA": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "RSC": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "OWFA": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "VWFA-1": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "VWFA-2": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "mfs-words": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "mTL-words": NaN,
+    "early": [
+        "alexnet",
+        "features.7"
+    ],
+    "midventral": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "midlateral": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "midparietal": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "ventral": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "lateral": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "parietal": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "All vertices": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "Unknown ROI": [
+        "resnet50",
+        "layer3.5.relu"
+    ],
+    "Unknown Stream": [
+        "alexnet",
+        "features.7"
+    ],
+    "Unknown": [
+        "resnet50",
+        "layer3.5.relu"
+    ]
+}

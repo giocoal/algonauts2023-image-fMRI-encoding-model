@@ -34,13 +34,13 @@ train_percentage = 90 # X% of the training data will be used for training, (100-
 transform = image_preprocessing.imagenet_transform_alt
 
 batch_size = 64
-pca_component = 1024
+pca_component = 100
 min_pca_batch_size = pca_component + 300 # pca_component * 2
 
 compute_pca = True
-feature_model_type = "RetinaNet" #@param ["alexnet", "ZFNet", "resnet50", "vgg16","vgg19_bn" , "efficientnetb2", "efficientnetb2lib"]
-model_layer = "fpn"
-regression_type = "ridge" #@param ["linear", "ridge"]
+feature_model_type = "alexnet" #@param ["alexnet", "ZFNet", "resnet50", "vgg16","vgg19_bn" , "efficientnetb2", "efficientnetb2lib"]
+model_layer = "features.12"
+regression_type = "linear" #@param ["linear", "ridge"]
 
 save = True 
 

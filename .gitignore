@@ -1,6 +1,14 @@
 # Folders
-files/
+files/pca
+files/preds_backups
+files/repos
+files/submission_outputs
+files/submissions
+docs/MeetingSlides
+docs/MeetingSlides
+scripts/algonauts_2023_challenge_submission
 notebooks/algonauts_2023_challenge_submission
 notebooks/util_algonauts_2023_challenge_reconstruct_tutorial.ipynb
 notebooks/util_algonauts_2023_challenge_tutorial.ipynb
+docs/
 masks_surfaces_subj1_test.ipynb
