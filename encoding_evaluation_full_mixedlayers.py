@@ -139,12 +139,20 @@ if __name__ == "__main__":
         # test_models_layers = {'alexnet': [['features.11', 'features.12'], 'features.2'],
         #                       'ZFNet': ['features.stage3.pool3']}
         def pca_selector(model_and_layer):
+            no_pca_model = ['DINOv2s','DINOv2b','DINOv2l','DINOv2g']
             no_pca = [['DINOv2', 'DINOv2'], ['efficientnetb2', 'avgpool'], ['efficientnetb2', 'flatten']]
             yes_pca = ['RetinaNet', 'ZFNet', 'resnet50', 'alexnet', 'vgg16', 'vgg19', 'efficientnetb2']
             
-            if model_and_layer in no_pca:
+            if (model_and_layer in no_pca) or (model_and_layer[0] == 'DINOv2s') or ((model_and_layer[0] in no_pca_model) and (not isinstance(model_and_layer[1], list))):
                 print('PCA will not be used')
                 return False
+            elif ((model_and_layer[0] == 'DINOv2b') or (model_and_layer[0] == 'DINOv2l')) and (isinstance(model_and_layer[1], list)): 
+                if len(model_and_layer[1]) > 2:
+                    print('PCA will be used')
+                    return True
+                else:
+                    print('PCA will not be used')
+                    return False
             else:
                 print('PCA will be used')
                 return True
@@ -158,13 +166,17 @@ if __name__ == "__main__":
                             'imagenet_V2_transform': image_preprocessing.imagenet_V2_transform,
                             'dinov2_transform': image_preprocessing.dinov2_transform,
                             'efficientnetb2_transform': image_preprocessing.efficientnetb2_transform,
-                            'imagenet_V1_transform': image_preprocessing.imagenet_V1_transform}
+                            'imagenet_V1_transform': image_preprocessing.imagenet_V1_transform,
+                            'dinov2_transform_V2': image_preprocessing.dinov2_transform_V2,
+                            'dino_resnet50_preprocess': image_preprocessing.dino_resnet50_preprocess}
         
         def test_preprocessing_selector(model):
-            imagenet_transform_alt_list = ['resnet50','RetinaNet', 'ZFNet', 'resnet50', 'vgg19']
-            imagenet_V2_transform_list = ['alexnet', 'vgg16']
-            dinov2_transform_list = ['DINOv2']
+            imagenet_transform_alt_list = ['RetinaNet','ZFNet', 'resnet50', 'vgg19','resnet50','alexnet', 'vgg16']
+            imagenet_V2_transform_list = []
+            dinov2_transform_list = []
+            dinov2_transform_V2_list = ['DINOv2s','DINOv2b','DINOv2l','DINOv2g']
             efficientnetb2_transform_list = ['efficientnetb2']
+            dino_resnet50_preprocess_list = ['dino_res50']
             
             if model in imagenet_transform_alt_list:
                 print('Using imagenet_transform_alt')
@@ -175,6 +187,12 @@ if __name__ == "__main__":
             elif model in dinov2_transform_list:
                 print('Using dinov2_transform')
                 return image_preprocessing.dinov2_transform, 'dinov2_transform'
+            elif model in dino_resnet50_preprocess_list:
+                print('Using dino_resnet50_preprocess')
+                return image_preprocessing.dino_resnet50_preprocess, 'dino_resnet50_preprocess'
+            elif model in dinov2_transform_V2_list:
+                print('Using dinov2_transform_V2_list')
+                return image_preprocessing.dinov2_transform_V2, 'dinov2_transform_V2'
             elif model in efficientnetb2_transform_list:
                 print('Using efficientnetb2_transform')
                 return image_preprocessing.efficientnetb2_transform, 'efficientnetb2_transform'
@@ -182,36 +200,42 @@ if __name__ == "__main__":
                 print('No preprocessing selected, using imagenet_transform_alt')
                 return image_preprocessing.imagenet_transform_alt, 'imagenet_transform_alt'
         
-        test_models_layers = {'RetinaNet': ['fpn', 'body.layer4.2.relu_2', 'body.layer4.2.relu_1', 'body.layer4.2.relu','body.layer3.5.relu_1', 'body.layer3.5.relu_2','body.layer3.0.relu_2', 'body.layer3.1.relu'],
-                              'efficientnetb2': ['avgpool', 'flatten', 'features.8', 'features.7.0.block.3', 'features.6.4.block.3', 'features.3.0.block.2', 'features.3.2.block.3', 'features.4.1.block.3','features.5.1.block.2'],
-                              'DINOv2': ['DINOv2'],
+        test_models_layers = {'DINOv2s': [['0', '1', '2'],'2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
+                              'DINOv2b': ['2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
+                              'DINOv2l': ['2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['11','12','13'], ['13','14','15'], ['11','12','13','14','15'], ['15','16','17'], ['17','18','19'], ['15','16','17','18','19'], ['19','20','21'], ['22','23'], ['19','20','21','22','23']],
+                              'dino_res50': ['layer1.0.relu', 'layer1.1.relu', 'layer1.2.relu', 'layer2.1.relu', 'layer2.2.relu', 'layer2.3.relu', 'layer3.0.relu', 'layer3.1.relu', 'layer3.2.relu', 'layer3.3.relu', 'layer3.4.relu', 'layer3.5.relu', 'layer4.0.relu', 'layer4.1.relu', 'layer4.2.relu', 'avgpool'],
                               'alexnet': [['features.10', 'features.11', 'features.12'], 'features.1', 'features.4', 'features.7', 'features.9', 'features.11', 'features.12'],
                               'ZFNet': ['features.stage1.unit1.pool1', 'features.stage2.unit1.activ', 'features.stage3.unit3.activ', 'features.stage3.pool3', 'features.stage3.unit1.activ', 'features.stage3.unit2.activ'],
+                              'RetinaNet': ['fpn', 'body.layer4.2.relu_2', 'body.layer4.2.relu_1', 'body.layer4.2.relu','body.layer3.5.relu_1', 'body.layer3.5.relu_2','body.layer3.0.relu_2', 'body.layer3.1.relu'],
                               'resnet50': ['layer1.0.relu', 'layer1.1.relu', 'layer1.2.relu', 'layer2.1.relu', 'layer2.2.relu', 'layer2.3.relu', 'layer3.0.relu', 'layer3.1.relu', 'layer3.2.relu', 'layer3.3.relu', 'layer3.4.relu', 'layer3.5.relu', 'layer4.0.relu', 'layer4.1.relu', 'layer4.2.relu', 'avgpool'], # 'layer2.0.relu',
+                              'efficientnetb2': ['avgpool', 'flatten', 'features.8', 'features.7.0.block.3', 'features.6.4.block.3', 'features.3.0.block.2', 'features.3.2.block.3', 'features.4.1.block.3','features.5.1.block.2'],
                               'vgg16': ['avgpool'],
                               'vgg19': ['avgpool', 'features.33', 'features.35'],
                                # 'vgg16_bn': [ 'features.36','features.39','features.42','avgpool'],
                               'vgg19_bn': ['avgpool', 'features.51', 'features.45', 'features.42']}
         
-        test_the_layers = False #@param ["True", "False"] 
+        test_the_layers = True #@param ["True", "False"] 
         # retest all the layers even if they have been tested before
         force_test = False #@param ["True", "False"]
+        config_subj = 1
         start_subj = 1
+        end_subj = 1
 
         # Config file name (global will point to the "global" config folder)
         config_file_mode = 'global' #@param ["global", "local"]
-        extraction_config_file = 'config_0.61511.json'
+        extraction_config_folder = f'config_subj{config_subj}'
+        extraction_config_file = 'config_0.54767.json'
 
         # Create a submission folder and save the resulting files ?
         save = True 
-        save_pca = True
+        save_pca = False
 
         regression_type = "ridge" #@param ["linear", "ridge"]
         grid_search = True
         alpha_l = 1e5
         alpha_r = 1e5
-        params_grid = {'alpha': [1, 10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6, 2e6]}
-        
+        params_grid = {'alpha': [0.000001, 0.00001, 0.0001,0.001,0.01,0.1, 1, 10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6, 2e6]}
+        #params_grid = {'alpha': [1, 10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6, 2e6]}
 
     ### Path definition
     model_layer_full = '_'.join([
@@ -238,8 +262,8 @@ if __name__ == "__main__":
     submission_name = config_name + "_" + str.upper(regression_type) + f'{strftime("(%Y-%m-%d)")}'
     parent_submission_dir = f'./files/submissions/{submission_name}'
     # folders where the config files will be saved (global and local best performing layers)
-    parent_config_dir = f'./files/config/{config_name}'
-    global_config_dir = './files/config/global'
+    parent_config_dir = f'./files/{extraction_config_folder}/{config_name}'
+    global_config_dir = f'./files/{extraction_config_folder}/global'
     pca_dir = './files/pca'
     if not os.path.isdir(parent_submission_dir + '_TEST') and save and test_the_layers:
         parent_submission_dir = parent_submission_dir + '_TEST'
@@ -252,7 +276,7 @@ if __name__ == "__main__":
     noise_norm_corr_dict = {}
     noise_norm_corr_ROI_dict = {} 
     datetime_id = strftime("(%Y-%m-%d_%H-%M)")
-    for subj in list(range(start_subj, 9)):
+    for subj in list(range(start_subj, end_subj+1)):
         print(f'############################ {color.BOLD + color.RED} Subject: {str(subj)} {color.END + color.END} ############################ \n')
         if test_the_layers == True:
             '''
@@ -330,6 +354,8 @@ if __name__ == "__main__":
                     
                     compute_pca = pca_selector([feature_model_type, model_layer])
                     
+                    start_time_feature_extraction = time.time()
+                    
                     if compute_pca:
                         # Fit the PCA model
                         pca_batch_size, n_stacked_batches = pca_batch_calculator(len(idxs_train),
@@ -367,7 +393,10 @@ if __name__ == "__main__":
                         # print('## Checking and Freeing  GPU memory...')
                         # memory_checker()
                         model.to('cpu') # sposto sulla ram
-                        feature_extractor.to('cpu') # sposto sulla ram
+                        try:
+                            feature_extractor.to('cpu') # sposto sulla ram
+                        except:
+                            pass
                         del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
                         torch.cuda.empty_cache() # elimino la chache vram
                         gc.collect() # elimino la cache ram
@@ -379,7 +408,10 @@ if __name__ == "__main__":
                         features_test = extract_features_no_pca(feature_extractor, test_imgs_dataloader, device)
                         
                         model.to('cpu') # sposto sulla ram
-                        feature_extractor.to('cpu') # sposto sulla ram
+                        try:
+                            feature_extractor.to('cpu') # sposto sulla ram
+                        except:
+                            pass
                         del model, feature_extractor, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
                         torch.cuda.empty_cache() # elimino la chache vram
                         gc.collect() # elimino la cache ram
@@ -569,6 +601,9 @@ if __name__ == "__main__":
         
         # Starting to iterate overe the models and layers to use
         first_iteration = True
+        # print final_models_layers dict with indentation
+        print("Model: Layer(s) that will be used for the inference")
+        print(json.dumps(final_models_layers, indent=4))
         for feature_model_type, model_layers in final_models_layers.items():
             for model_layer in model_layers:
                 counter_layers_to_test += 1
@@ -645,7 +680,10 @@ if __name__ == "__main__":
                     # print('## Checking and Freeing  GPU memory...')
                     # memory_checker()
                     model.to('cpu') # sposto sulla ram
-                    feature_extractor.to('cpu') # sposto sulla ram
+                    try:
+                        feature_extractor.to('cpu') # sposto sulla ram
+                    except:
+                        pass
                     del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
                     torch.cuda.empty_cache() # elimino la chache vram
                     gc.collect() # elimino la cache ram
@@ -657,7 +695,10 @@ if __name__ == "__main__":
                     features_test = extract_features_no_pca(feature_extractor, test_imgs_dataloader, device)
                     
                     model.to('cpu') # sposto sulla ram
-                    feature_extractor.to('cpu') # sposto sulla ram
+                    try:
+                        feature_extractor.to('cpu') # sposto sulla ram
+                    except:
+                        pass
                     del model, feature_extractor, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
                     torch.cuda.empty_cache() # elimino la chache vram
                     gc.collect() # elimino la cache ram
