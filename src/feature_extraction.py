@@ -11,6 +11,47 @@ from sklearn.decomposition import IncrementalPCA
 from tqdm import tqdm
 import numpy as np
 
+from collections import OrderedDict
+
+class DINOv2FeatureExtractor:
+    def __init__(self, model, return_layers, reshape = False, return_class_token = True, norm = True):
+        """Wraps a Pytorch DINOv2 module to get intermediate values
+        Arguments:
+            model {nn.module} -- The Pytorch module to call
+            return_layers {list} -- List of blocks layer number e.g. [1,2,3] will take output [blocks.1,blocks.2,blocks.3] 
+            reshape {bool} -- If True, the output of each layer is reshaped to a 2D tensor with same shape as the output of input image
+            return_class_token {bool} -- If True, the output will be a 2-element tuple with patches tokens and CLS token respectively first and second element
+            norm {bool} -- If True, the output of each layer is normalized
+        Returns:
+            When initialized, the class returns a feature extractor callable on a batch of images.
+            When the feature extractor is called, it returns an OrderedDict with the requested layers as keys and the corresponding features as values.
+        """
+        self.model = model
+        if isinstance(return_layers, list):
+            self.return_layers = [int(string) for string in return_layers]
+        else:
+            print("Set model layers as lists even if single layer extraction.")
+            return_layers = [return_layers]
+            self.return_layers = [int(string) for string in return_layers]
+        self.reshape = reshape
+        self.return_class_token = return_class_token
+        self.norm = norm
+        self.number_of_blocks = len(self.model.blocks)
+        
+    def __call__(self, X):
+        """
+        Arguments:
+            X: batch of images (torch tensor)
+        """
+        ret = OrderedDict()
+        model_layers = ["blocks." + str(number) for number in self.return_layers]
+        try:
+            features = self.model.get_intermediate_layers(x = X, n = self.return_layers, reshape = self.reshape, return_class_token = self.return_class_token, norm = self.norm)
+        except AttributeError as e:
+            raise AttributeError(f'Module/s {self.return_layers} not found')
+        ret = OrderedDict((key, value[1]) for key, value in zip(model_layers, features))
+        return ret
+
 def feature_extractor_gen(model, model_layer, device):
     """Creates a feature extractor from a model.
     Args:
@@ -81,6 +122,9 @@ def model_loader(feature_model_type, model_layer, device):
                         weights=weights)
         # ['x', 'conv1', 'bn1', 'relu', 'maxpool', 'layer1.0.conv1', 'layer1.0.bn1', 'layer1.0.relu', 'layer1.0.conv2', 'layer1.0.bn2', 'layer1.0.relu_1', 'layer1.0.conv3', 'layer1.0.bn3', 'layer1.0.downsample.0', 'layer1.0.downsample.1', 'layer1.0.add', 'layer1.0.relu_2', 'layer1.1.conv1', 'layer1.1.bn1', 'layer1.1.relu', 'layer1.1.conv2', 'layer1.1.bn2', 'layer1.1.relu_1', 'layer1.1.conv3', 'layer1.1.bn3', 'layer1.1.add', 'layer1.1.relu_2', 'layer1.2.conv1', 'layer1.2.bn1', 'layer1.2.relu', 'layer1.2.conv2', 'layer1.2.bn2', 'layer1.2.relu_1', 'layer1.2.conv3', 'layer1.2.bn3', 'layer1.2.add', 'layer1.2.relu_2', 'layer2.0.conv1', 'layer2.0.bn1', 'layer2.0.relu', 'layer2.0.conv2', 'layer2.0.bn2', 'layer2.0.relu_1', 'layer2.0.conv3', 'layer2.0.bn3', 'layer2.0.downsample.0', 'layer2.0.downsample.1', 'layer2.0.add', 'layer2.0.relu_2', 'layer2.1.conv1', 'layer2.1.bn1', 'layer2.1.relu', 'layer2.1.conv2', 'layer2.1.bn2', 'layer2.1.relu_1', 'layer2.1.conv3', 'layer2.1.bn3', 'layer2.1.add', 'layer2.1.relu_2', 'layer2.2.conv1', 'layer2.2.bn1', 'layer2.2.relu', 'layer2.2.conv2', 'layer2.2.bn2', 'layer2.2.relu_1', 'layer2.2.conv3', 'layer2.2.bn3', 'layer2.2.add', 'layer2.2.relu_2', 'layer2.3.conv1', 'layer2.3.bn1', 'layer2.3.relu', 'layer2.3.conv2', 'layer2.3.bn2', 'layer2.3.relu_1', 'layer2.3.conv3', 'layer2.3.bn3', 'layer2.3.add', 'layer2.3.relu_2', 'layer3.0.conv1', 'layer3.0.bn1', 'layer3.0.relu', 'layer3.0.conv2', 'layer3.0.bn2', 'layer3.0.relu_1', 'layer3.0.conv3', 'layer3.0.bn3', 'layer3.0.downsample.0', 'layer3.0.downsample.1', 'layer3.0.add', 'layer3.0.relu_2', 'layer3.1.conv1', 'layer3.1.bn1', 'layer3.1.relu', 'layer3.1.conv2', 'layer3.1.bn2', 'layer3.1.relu_1', 'layer3.1.conv3', 'layer3.1.bn3', 'layer3.1.add', 'layer3.1.relu_2', 'layer3.2.conv1', 'layer3.2.bn1', 'layer3.2.relu', 'layer3.2.conv2', 'layer3.2.bn2', 'layer3.2.relu_1', 'layer3.2.conv3', 'layer3.2.bn3', 'layer3.2.add', 'layer3.2.relu_2', 'layer3.3.conv1', 'layer3.3.bn1', 'layer3.3.relu', 'layer3.3.conv2', 'layer3.3.bn2', 'layer3.3.relu_1', 'layer3.3.conv3', 'layer3.3.bn3', 'layer3.3.add', 'layer3.3.relu_2', 'layer3.4.conv1', 'layer3.4.bn1', 'layer3.4.relu', 'layer3.4.conv2', 'layer3.4.bn2', 'layer3.4.relu_1', 'layer3.4.conv3', 'layer3.4.bn3', 'layer3.4.add', 'layer3.4.relu_2', 'layer3.5.conv1', 'layer3.5.bn1', 'layer3.5.relu', 'layer3.5.conv2', 'layer3.5.bn2', 'layer3.5.relu_1', 'layer3.5.conv3', 'layer3.5.bn3', 'layer3.5.add', 'layer3.5.relu_2', 'layer4.0.conv1', 'layer4.0.bn1', 'layer4.0.relu', 'layer4.0.conv2', 'layer4.0.bn2', 'layer4.0.relu_1', 'layer4.0.conv3', 'layer4.0.bn3', 'layer4.0.downsample.0', 'layer4.0.downsample.1', 'layer4.0.add', 'layer4.0.relu_2', 'layer4.1.conv1', 'layer4.1.bn1', 'layer4.1.relu', 'layer4.1.conv2', 'layer4.1.bn2', 'layer4.1.relu_1', 'layer4.1.conv3', 'layer4.1.bn3', 'layer4.1.add', 'layer4.1.relu_2', 'layer4.2.conv1', 'layer4.2.bn1', 'layer4.2.relu', 'layer4.2.conv2', 'layer4.2.bn2', 'layer4.2.relu_1', 'layer4.2.conv3', 'layer4.2.bn3', 'layer4.2.add', 'layer4.2.relu_2', 'avgpool', 'flatten', 'fc']
         model, feature_extractor = feature_extractor_gen(model, model_layer, device)
+    elif feature_model_type == 'dino_res50':
+        model = torch.hub.load('facebookresearch/dino:main', 'dino_resnet50')
+        model, feature_extractor = feature_extractor_gen(model, model_layer, device)
     elif feature_model_type == 'resnet-50-maxpool':
         # resnet18, resnet34, resnet50, resnet101, resnet152
         if feature_model_type == 'resnet-50-maxpool':
@@ -91,13 +135,42 @@ def model_loader(feature_model_type, model_layer, device):
         # ['x', 'conv1', 'bn1', 'relu', 'maxpool', 'layer1.0.conv1', 'layer1.0.bn1', 'layer1.0.relu', 'layer1.0.conv2', 'layer1.0.bn2', 'layer1.0.relu_1', 'layer1.0.conv3', 'layer1.0.bn3', 'layer1.0.downsample.0', 'layer1.0.downsample.1', 'layer1.0.add', 'layer1.0.relu_2', 'layer1.1.conv1', 'layer1.1.bn1', 'layer1.1.relu', 'layer1.1.conv2', 'layer1.1.bn2', 'layer1.1.relu_1', 'layer1.1.conv3', 'layer1.1.bn3', 'layer1.1.add', 'layer1.1.relu_2', 'layer1.2.conv1', 'layer1.2.bn1', 'layer1.2.relu', 'layer1.2.conv2', 'layer1.2.bn2', 'layer1.2.relu_1', 'layer1.2.conv3', 'layer1.2.bn3', 'layer1.2.add', 'layer1.2.relu_2', 'layer2.0.conv1', 'layer2.0.bn1', 'layer2.0.relu', 'layer2.0.conv2', 'layer2.0.bn2', 'layer2.0.relu_1', 'layer2.0.conv3', 'layer2.0.bn3', 'layer2.0.downsample.0', 'layer2.0.downsample.1', 'layer2.0.add', 'layer2.0.relu_2', 'layer2.1.conv1', 'layer2.1.bn1', 'layer2.1.relu', 'layer2.1.conv2', 'layer2.1.bn2', 'layer2.1.relu_1', 'layer2.1.conv3', 'layer2.1.bn3', 'layer2.1.add', 'layer2.1.relu_2', 'layer2.2.conv1', 'layer2.2.bn1', 'layer2.2.relu', 'layer2.2.conv2', 'layer2.2.bn2', 'layer2.2.relu_1', 'layer2.2.conv3', 'layer2.2.bn3', 'layer2.2.add', 'layer2.2.relu_2', 'layer2.3.conv1', 'layer2.3.bn1', 'layer2.3.relu', 'layer2.3.conv2', 'layer2.3.bn2', 'layer2.3.relu_1', 'layer2.3.conv3', 'layer2.3.bn3', 'layer2.3.add', 'layer2.3.relu_2', 'layer3.0.conv1', 'layer3.0.bn1', 'layer3.0.relu', 'layer3.0.conv2', 'layer3.0.bn2', 'layer3.0.relu_1', 'layer3.0.conv3', 'layer3.0.bn3', 'layer3.0.downsample.0', 'layer3.0.downsample.1', 'layer3.0.add', 'layer3.0.relu_2', 'layer3.1.conv1', 'layer3.1.bn1', 'layer3.1.relu', 'layer3.1.conv2', 'layer3.1.bn2', 'layer3.1.relu_1', 'layer3.1.conv3', 'layer3.1.bn3', 'layer3.1.add', 'layer3.1.relu_2', 'layer3.2.conv1', 'layer3.2.bn1', 'layer3.2.relu', 'layer3.2.conv2', 'layer3.2.bn2', 'layer3.2.relu_1', 'layer3.2.conv3', 'layer3.2.bn3', 'layer3.2.add', 'layer3.2.relu_2', 'layer3.3.conv1', 'layer3.3.bn1', 'layer3.3.relu', 'layer3.3.conv2', 'layer3.3.bn2', 'layer3.3.relu_1', 'layer3.3.conv3', 'layer3.3.bn3', 'layer3.3.add', 'layer3.3.relu_2', 'layer3.4.conv1', 'layer3.4.bn1', 'layer3.4.relu', 'layer3.4.conv2', 'layer3.4.bn2', 'layer3.4.relu_1', 'layer3.4.conv3', 'layer3.4.bn3', 'layer3.4.add', 'layer3.4.relu_2', 'layer3.5.conv1', 'layer3.5.bn1', 'layer3.5.relu', 'layer3.5.conv2', 'layer3.5.bn2', 'layer3.5.relu_1', 'layer3.5.conv3', 'layer3.5.bn3', 'layer3.5.add', 'layer3.5.relu_2', 'layer4.0.conv1', 'layer4.0.bn1', 'layer4.0.relu', 'layer4.0.conv2', 'layer4.0.bn2', 'layer4.0.relu_1', 'layer4.0.conv3', 'layer4.0.bn3', 'layer4.0.downsample.0', 'layer4.0.downsample.1', 'layer4.0.add', 'layer4.0.relu_2', 'layer4.1.conv1', 'layer4.1.bn1', 'layer4.1.relu', 'layer4.1.conv2', 'layer4.1.bn2', 'layer4.1.relu_1', 'layer4.1.conv3', 'layer4.1.bn3', 'layer4.1.add', 'layer4.1.relu_2', 'layer4.2.conv1', 'layer4.2.bn1', 'layer4.2.relu', 'layer4.2.conv2', 'layer4.2.bn2', 'layer4.2.relu_1', 'layer4.2.conv3', 'layer4.2.bn3', 'layer4.2.add', 'layer4.2.relu_2', 'avgpool', 'flatten', 'fc']
         model, feature_extractor = feature_extractor_gen(model, "avgpool", device)
         feature_extractor.avgpool = nn.AdaptiveMaxPool2d(3)
-    elif feature_model_type == 'DINOv2':
-        model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14')
+    elif 'DINOv2' in feature_model_type:
+        # - small (s) e base (b) hanno 12 blocchi
+        # - large (l) ha 24 blocchi
+        # - giant (g) ha 40 blocchi
+        # La **dimensione degli embedding** (lunghezza feature maps) è:
+        # - small 384
+        # - base 768
+        # - large 1024
+        # - giant 1536
+        if feature_model_type == 'DINOv2s':
+            model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14')
+        elif feature_model_type == 'DINOv2b':
+            model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitb14')
+        elif feature_model_type == 'DINOv2l':
+            model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
+        elif feature_model_type == 'DINOv2g':
+            model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14')
+        else:
+            print("Warning: DINOv2 Model not found, using DINOv2s as default.")
+            model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14')
         model.to(device) # send the model to the chosen device ('cpu' or 'cuda')
         model.eval() # set the model to evaluation mode, since you are not training it
         for param in model.parameters():
             param.requires_grad = False
-        feature_extractor = model
+        number_of_blocks = len(model.blocks)
+        if model_layer == "DINOv2" or model_layer == str(len(model.blocks)):
+            print(f"Using Full DINOv2 Model (block {len(model.blocks)})")
+            feature_extractor = model
+        else:
+            print(f"Using Intermediate DINOv2 Model Layer/s (block/s {model_layer})")
+            feature_extractor = DINOv2FeatureExtractor(model, return_layers = model_layer, reshape = False, return_class_token = True, norm = True)
+            # subcract = 12 - int(model_layer)
+            # print(f"Using Intermediate DINOv2 Model Layer (block {model_layer})")
+            # modules=list(model.blocks.children())[:-subcract]
+            # feature_extractor = model
+            # feature_extractor.blocks =nn.Sequential(*modules)
     elif feature_model_type == 'RetinaNet':
         model = models.detection.retinanet_resnet50_fpn(weights = RetinaNet_ResNet50_FPN_Weights.COCO_V1).backbone
         model, feature_extractor = feature_extractor_gen(model, model_layer, device)
