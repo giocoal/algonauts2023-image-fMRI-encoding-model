@@ -168,7 +168,8 @@ if __name__ == "__main__":
                             'efficientnetb2_transform': image_preprocessing.efficientnetb2_transform,
                             'imagenet_V1_transform': image_preprocessing.imagenet_V1_transform,
                             'dinov2_transform_V2': image_preprocessing.dinov2_transform_V2,
-                            'dino_resnet50_preprocess': image_preprocessing.dino_resnet50_preprocess}
+                            'dino_resnet50_preprocess': image_preprocessing.dino_resnet50_preprocess,
+                            'ViT_GPT2': image_preprocessing.ViT_GPT2_transform}
         
         def test_preprocessing_selector(model):
             imagenet_transform_alt_list = ['RetinaNet','ZFNet', 'resnet50', 'vgg19','resnet50','alexnet', 'vgg16']
@@ -177,6 +178,7 @@ if __name__ == "__main__":
             dinov2_transform_V2_list = ['DINOv2s','DINOv2b','DINOv2l','DINOv2g']
             efficientnetb2_transform_list = ['efficientnetb2']
             dino_resnet50_preprocess_list = ['dino_res50']
+            ViT_GPT2_transform_list = ['ViT_GPT2']
             
             if model in imagenet_transform_alt_list:
                 print('Using imagenet_transform_alt')
@@ -196,11 +198,15 @@ if __name__ == "__main__":
             elif model in efficientnetb2_transform_list:
                 print('Using efficientnetb2_transform')
                 return image_preprocessing.efficientnetb2_transform, 'efficientnetb2_transform'
+            elif model in ViT_GPT2_transform_list:
+                print('Using ViT_GPT2_transform')
+                return image_preprocessing.ViT_GPT2_transform, 'ViT_GPT2_transform'
             else:
                 print('No preprocessing selected, using imagenet_transform_alt')
                 return image_preprocessing.imagenet_transform_alt, 'imagenet_transform_alt'
         
-        test_models_layers = {'DINOv2s': [['0', '1', '2'],'2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
+        test_models_layers = {'ViT_GPT2': [['decoder.9', 'decoder.10', 'decoder.11', 'decoder.12']],
+                              'DINOv2s': [['0', '1', '2'],'2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
                               'DINOv2b': ['2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
                               'DINOv2l': ['2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['11','12','13'], ['13','14','15'], ['11','12','13','14','15'], ['15','16','17'], ['17','18','19'], ['15','16','17','18','19'], ['19','20','21'], ['22','23'], ['19','20','21','22','23']],
                               'dino_res50': ['layer1.0.relu', 'layer1.1.relu', 'layer1.2.relu', 'layer2.1.relu', 'layer2.2.relu', 'layer2.3.relu', 'layer3.0.relu', 'layer3.1.relu', 'layer3.2.relu', 'layer3.3.relu', 'layer3.4.relu', 'layer3.5.relu', 'layer4.0.relu', 'layer4.1.relu', 'layer4.2.relu', 'avgpool'],

@@ -13,6 +13,8 @@ import numpy as np
 
 from collections import OrderedDict
 
+from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer
+
 class DINOv2FeatureExtractor:
     def __init__(self, model, return_layers, reshape = False, return_class_token = True, norm = True):
         """Wraps a Pytorch DINOv2 module to get intermediate values
@@ -50,6 +52,58 @@ class DINOv2FeatureExtractor:
         except AttributeError as e:
             raise AttributeError(f'Module/s {self.return_layers} not found')
         ret = OrderedDict((key, value[1]) for key, value in zip(model_layers, features))
+        return ret
+
+class VIT_GPT2_FeatureExtractor:
+    def __init__(self, model, return_layers, pretrained_weights = "nlpconnect/vit-gpt2-image-captioning"):
+        """Wraps a Pytorch DINOv2 module to get intermediate values
+        Arguments:
+            model {nn.module} -- The Pytorch module to call
+            return_layers {list} -- List of blocks layer number e.g. [1,2,3] will take output [encoder.1,encoder.2,encoder.3] or [decoder.1,decoder.2,decoder.3] 
+            feature_type {str} -- Define the block of ViTModel to extract. Encoder or decoder.
+        Returns:
+            When initialized, the class returns a feature extractor callable on a batch of images.
+            When the feature extractor is called, it returns an OrderedDict with the requested layers as keys and the corresponding features as values.
+        """
+        self.pretrained_weights = pretrained_weights
+        self.model = model
+        # define "decoder" or "encoder"
+        self.feature_type = return_layers[0].split('.')[0]
+        # create the list of layers names for the dictionary
+        self.model_layers = return_layers
+        # parameters for decoder generation
+        self.gen_kwargs = {"max_length": 16, "num_beams": 4,
+                            "return_dict_in_generate": True, "output_hidden_states": True}
+        if isinstance(return_layers, list):
+            # delete ".decoder" or ".encoder" from the string and convert to int
+            self.return_layers = [int(item.split('.')[1].strip()) for item in return_layers]
+        else:
+            print("Set model layers as lists even if single layer extraction.")
+            return_layers = [return_layers]
+            self.return_layers = [int(item.split('.')[1].strip()) for item in return_layers]
+        self.number_of_blocks = 13
+    def __call__(self, X):
+        """
+        Arguments:
+            X: batch of images (torch tensor)
+        """
+        ret = OrderedDict()
+        gen_kwargs = self.gen_kwargs
+        if self.feature_type == "encoder":
+            # extract features from all the encoder hidden layers
+            with torch.no_grad():
+                feats = self.model.encoder(
+                    X, output_hidden_states=True).hidden_states #[-4:]
+        else:
+            # extract features from all the decoder hidden layers
+            with torch.no_grad():
+                feats = self.model.generate(
+                    X, **gen_kwargs).encoder_hidden_states #[-4:]
+        # select only the layers embeddings specified in return_layers
+        feats = tuple(map(feats.__getitem__, self.return_layers))
+        # create the dictionary keys: "encoder.1", "encoder.2", ... or "decoder.1", "decoder.2", ...
+        # values: the corresponding embeddings
+        ret = OrderedDict((key, value) for key, value in zip(self.model_layers, feats))
         return ret
 
 def feature_extractor_gen(model, model_layer, device):
@@ -174,6 +228,14 @@ def model_loader(feature_model_type, model_layer, device):
     elif feature_model_type == 'RetinaNet':
         model = models.detection.retinanet_resnet50_fpn(weights = RetinaNet_ResNet50_FPN_Weights.COCO_V1).backbone
         model, feature_extractor = feature_extractor_gen(model, model_layer, device)
+    elif feature_model_type == 'ViT_GPT2':
+        pretrained_weights = "nlpconnect/vit-gpt2-image-captioning"
+        model = VisionEncoderDecoderModel.from_pretrained(pretrained_weights)
+        model.to(device) # send the model to the chosen device ('cpu' or 'cuda')
+        model.eval() # set the model to evaluation mode, since you are not training it
+        for param in model.parameters():
+            param.requires_grad = False
+        feature_extractor = VIT_GPT2_FeatureExtractor(model, return_layers = model_layer)
     else: 
         print("Warning: Model not found.")
         model = None 

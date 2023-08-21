@@ -3,6 +3,13 @@ from torchvision.transforms.functional import InterpolationMode
 from torchvision.models.detection import RetinaNet_ResNet50_FPN_Weights
 from torchvision.models import AlexNet_Weights
 from torchvision import transforms as pth_transforms
+from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer
+
+ViT_GPT2_pretrained_weights = "nlpconnect/vit-gpt2-image-captioning"
+ViT_GPT2_feature_extractor = ViTImageProcessor.from_pretrained(ViT_GPT2_pretrained_weights)
+
+def ViT_GPT2_transform(img):
+    return ViT_GPT2_feature_extractor(images=img, return_tensors="pt").pixel_values[0]
 
 imagenet_V1_transform = transforms.Compose([
     transforms.Resize((256,256)), # resize the images to 224x224 pixels (256x256)
