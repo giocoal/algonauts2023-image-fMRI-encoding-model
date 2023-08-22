@@ -6,6 +6,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_validate
 from sklearn.model_selection import KFold
 from sklearn.metrics import make_scorer
+from sklearn.preprocessing import StandardScaler
 from scipy.stats import pearsonr
 
 def compute_perason_numpy(pred, target):
@@ -33,8 +34,14 @@ def linear_regression(regression_type,
                       alpha_l = None,
                       alpha_r = None,
                       grid_search = False,
-                      param_grid = {'alpha': [10, 100, 1e4, 2e4, 5e4, 1e5, 1e6]}):
+                      param_grid = {'alpha': [10, 100, 1e4, 2e4, 5e4, 1e5, 1e6]},
+                      UseStandardScaler = False):
     # Fit linear regressions on the training data
+    if UseStandardScaler:
+        print('Standardizing features...')
+        features_train = StandardScaler().fit_transform(features_train)
+        features_val = StandardScaler().fit_transform(features_val)
+        features_test = StandardScaler().fit_transform(features_test)
     if regression_type == 'ridge':
         if grid_search:
             print('Fitting ridge regressions on the training data...')
@@ -76,9 +83,13 @@ def linear_regression(regression_type,
 def ridge_alpha_grid_search(features_train, 
                       lh_fmri_train, 
                       rh_fmri_train, 
-                      param_grid = {'alpha': [10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6]}):
+                      param_grid = {'alpha': [10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6]},
+                      UseStandardScaler = False):
     # Fit linear regressions on the training data
     print('Fitting ridge regressions on the training data...')
+    if UseStandardScaler:
+        print('Standardizing features...')
+        features_train = StandardScaler().fit_transform(features_train)
     #param_grid = {'alpha': [0.0001, 0.0002, 0.001, 0.01, 0.1, 1, 10, 100, 1e4, 2e4, 5e4, 1e5, 1e6]}
     grid_search_l = GridSearchCV(Ridge(), param_grid=param_grid, scoring=make_scorer(
         lambda x, y: np.median(compute_perason_numpy(x, y))), cv=5, n_jobs=5, verbose=1)

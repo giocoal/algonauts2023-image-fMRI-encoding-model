@@ -286,6 +286,29 @@ def json_config_to_feature_extraction_dict(config_dict):
     #     new_dict[first_string].sort()
     return new_dict
 
+def json_config_test_models_layers(config_dict):
+    new_dict = {}
+    for key, value in config_dict.items():
+        # If the value is not a list or is NaN, skip this iteration
+        if not isinstance(value, list) or (isinstance(value, float) and math.isnan(value)):
+            continue
+        
+        # model, layer/s, transform, regression_type
+        first_string, second_string, third_string, fourth_string = value
+        
+        # If the first string is not a key in the new dictionary, add an empty list
+        if first_string not in new_dict:
+            new_dict[first_string] = []
+        
+        # Add the second string to the corresponding list only if it's not already present
+        if [second_string, third_string, fourth_string] not in new_dict[first_string]:
+            new_dict[first_string].append([second_string, third_string, fourth_string])
+
+    # Sort the second strings in each list alphabetically
+    # for first_string in new_dict:
+    #     new_dict[first_string].sort()
+    return new_dict
+
 def final_subj_corr_dataframe_boxplot_istograms(noise_norm_corr_dict, title, save=None):
     # Create lists for the dataframe columns
     subject_list = []

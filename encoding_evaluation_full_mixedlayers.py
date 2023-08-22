@@ -129,15 +129,6 @@ if __name__ == "__main__":
         pca_component = 2048
         min_pca_batch_size = pca_component + 300 # pca_component * 2
         
-        # feature_model_type = "alexnet" #@param ["alexnet", "ZFNet", "RetinaNet","resnet50", "vgg16","vgg19_bn" , "efficientnetb2", "efficientnetb2lib"]
-        # model_layers = ["features.2", "features.12"] 
-
-        # create a dictionary to store the model layers
-        # ["alexnet", "ZFNet", "resnet50", "vgg16","vgg19_bn" , "efficientnetb2", "efficientnetb2lib"]
-        
-        # combining_mode = 'concat' #@param ["single", "concat", "mixed"]
-        # test_models_layers = {'alexnet': [['features.11', 'features.12'], 'features.2'],
-        #                       'ZFNet': ['features.stage3.pool3']}
         def pca_selector(model_and_layer):
             no_pca_model = ['DINOv2s','DINOv2b','DINOv2l','DINOv2g']
             no_pca = [['DINOv2', 'DINOv2'], ['efficientnetb2', 'avgpool'], ['efficientnetb2', 'flatten']]
@@ -205,7 +196,7 @@ if __name__ == "__main__":
                 print('No preprocessing selected, using imagenet_transform_alt')
                 return image_preprocessing.imagenet_transform_alt, 'imagenet_transform_alt'
         
-        test_models_layers = {'ViT_GPT2': [['decoder.9', 'decoder.10', 'decoder.11', 'decoder.12']],
+        test_models_layers = {#'ViT_GPT2': [['decoder.9', 'decoder.10', 'decoder.11', 'decoder.12']],
                               'DINOv2s': [['0', '1', '2'],'2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
                               'DINOv2b': ['2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
                               'DINOv2l': ['2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['11','12','13'], ['13','14','15'], ['11','12','13','14','15'], ['15','16','17'], ['17','18','19'], ['15','16','17','18','19'], ['19','20','21'], ['22','23'], ['19','20','21','22','23']],
@@ -218,25 +209,55 @@ if __name__ == "__main__":
                               'vgg16': ['avgpool'],
                               'vgg19': ['avgpool', 'features.33', 'features.35'],
                                # 'vgg16_bn': [ 'features.36','features.39','features.42','avgpool'],
-                              'vgg19_bn': ['avgpool', 'features.51', 'features.45', 'features.42']}
+                              'vgg19_bn': ['avgpool', 'features.51', 'features.45', 'features.42']} 
         
+        ## testing parameters
         test_the_layers = True #@param ["True", "False"] 
+        test_a_config = True
+        skip_inference_while_testing = True
+        
         # retest all the layers even if they have been tested before
         force_test = False #@param ["True", "False"]
         config_subj = 1
-        start_subj = 1
-        end_subj = 1
+        extraction_config_folder = f'config_subj{config_subj}'
+        extraction_config_file = 'config_0.64732.json'
+        # extract the layers to test from the config file (if test_a_config is True)
+        if test_a_config:
+            global_config_dir = f'./files/{extraction_config_folder}/global'
+            with open(os.path.join(global_config_dir, extraction_config_file), 'r') as json_file:
+                    final_extraction_config = json.load(json_file)
+            # remove useless ROIs from the config file
+            keys_to_remove = ['All vertices', 'Unknown ROI', 'Unknown Stream']
+            for key in keys_to_remove:
+                if key in final_extraction_config:
+                    del final_extraction_config[key]
+            test_models_layers = json_config_to_feature_extraction_dict(final_extraction_config)
+            
+        ## Define the subject to test/inference  on
+        start_subj = 2
+        end_subj = 5
 
+        ## config INFERENCE parameters 
         # Config file name (global will point to the "global" config folder)
         config_file_mode = 'global' #@param ["global", "local"]
-        extraction_config_folder = f'config_subj{config_subj}'
-        extraction_config_file = 'config_0.54767.json'
+        # which configuration to use
+        config_dict = {'1': {'extraction_config_file' : 'config_0.64732.json', 'config_subj': 1},
+                        '2': {'extraction_config_file' : 'config_0.64732.json', 'config_subj': 1},
+                        '3': {'extraction_config_file' : 'config_0.64732.json', 'config_subj': 1},
+                        '4': {'extraction_config_file' : 'config_0.64732.json', 'config_subj': 1},
+                        '5': {'extraction_config_file' : 'config_0.64732.json', 'config_subj': 1},
+                        '6': {'extraction_config_file' : 'config_0.55162.json', 'config_subj': 6},
+                        '7': {'extraction_config_file' : 'config_0.55162.json', 'config_subj': 6},
+                        '8': {'extraction_config_file' : 'config_0.55162.json', 'config_subj': 6}}
+        
 
         # Create a submission folder and save the resulting files ?
         save = True 
-        save_pca = False
+        load_save_pca = True
+        load_save_downsampled_feature = True
 
         regression_type = "ridge" #@param ["linear", "ridge"]
+        standardize_features = False #@param ["True", "False"]
         grid_search = True
         alpha_l = 1e5
         alpha_r = 1e5
@@ -244,13 +265,13 @@ if __name__ == "__main__":
         #params_grid = {'alpha': [1, 10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6, 2e6]}
 
     ### Path definition
-    model_layer_full = '_'.join([
-        '{}_{}'.format(model.upper(), '+'.join(transform_layers_test(layers)))
-        for model, layers in test_models_layers.items()
-    ])
+    # model_layer_full = '_'.join([
+    #     '{}_{}'.format(model.upper(), '+'.join(transform_layers_test(layers)))
+    #     for model, layers in test_models_layers.items()
+    # ])
 
     datetime_id = strftime("(%Y-%m-%d_%H-%M)")
-    submission_name = f'{strftime("(%Y-%m-%d_%H-%M)")}-{model_layer_full}-PCA_{pca_component}-{regression_type.upper()}-ALPHA_{"{:.1e}".format(alpha_l)}'
+    # submission_name = f'{strftime("(%Y-%m-%d_%H-%M)")}-{model_layer_full}-PCA_{pca_component}-{regression_type.upper()}-ALPHA_{"{:.1e}".format(alpha_l)}'
 
 
     ### Path definition
@@ -268,14 +289,14 @@ if __name__ == "__main__":
     submission_name = config_name + "_" + str.upper(regression_type) + f'{strftime("(%Y-%m-%d)")}'
     parent_submission_dir = f'./files/submissions/{submission_name}'
     # folders where the config files will be saved (global and local best performing layers)
-    parent_config_dir = f'./files/{extraction_config_folder}/{config_name}'
-    global_config_dir = f'./files/{extraction_config_folder}/global'
+    # parent_config_dir = f'./files/{extraction_config_folder}/{config_name}'
+    # global_config_dir = f'./files/{extraction_config_folder}/global'
     pca_dir = './files/pca'
     if not os.path.isdir(parent_submission_dir + '_TEST') and save and test_the_layers:
         parent_submission_dir = parent_submission_dir + '_TEST'
         os.makedirs(parent_submission_dir)
-    if not os.path.isdir(parent_config_dir) and save and test_the_layers:
-        os.makedirs(parent_config_dir)
+    # if not os.path.isdir(parent_config_dir) and save and test_the_layers:
+    #     os.makedirs(parent_config_dir)
     print(submission_name + "\n")
     
     # define the dictionary to store the correlation values
@@ -297,6 +318,13 @@ if __name__ == "__main__":
             counter_layers_to_test = 0
             first_iteration = True
             
+            # set the config dir 
+            config_subj = subj
+            extraction_config_folder = f'config_subj{config_subj}'
+            parent_config_dir = f'./files/{extraction_config_folder}/{config_name}'
+            global_config_dir = f'./files/{extraction_config_folder}/global'
+            if not os.path.isdir(parent_config_dir) and save and test_the_layers:
+                os.makedirs(parent_config_dir)
             # Importing the df containing ROI_wise accuracy for all the layers tested in the past
             median_roi_correlation_df_global = pd.read_csv(os.path.join(global_config_dir, 
                                                                         f"scores_subj_layer_roi.csv"), index_col=0)
@@ -307,7 +335,14 @@ if __name__ == "__main__":
             for feature_model_type, model_layers in test_models_layers.items():
                 for model_layer in model_layers:
                     counter_layers_to_test += 1
-                    transform, transform_string = test_preprocessing_selector(feature_model_type)
+                    if test_a_config:
+                        transform_string = model_layer[1]
+                        transform = transform_dict[transform_string]
+                        regression_type = model_layer[2]
+                        model_layer = model_layer[0]
+                        
+                    else:
+                        transform, transform_string = test_preprocessing_selector(feature_model_type)
                     print(f'\n######## Testing Model: {color.BOLD + feature_model_type + color.END} Layer(s): {color.BOLD + str(model_layer) + color.END}  - Transform: {color.BOLD + str(transform_string) + color.END} - Regression Type: {color.BOLD + str(regression_type) + color.END} {counter_layers_to_test}/{totale_layers_to_test} ######## \n')
                     # first of all i verify that the couple model+layer has never been tested before
                     # in positive case i will use the old score and do not re-test the specific layer (minimum variation in accuracy is exected)
@@ -369,21 +404,21 @@ if __name__ == "__main__":
                                                                                 min_pca_batch_size,
                                                                                 pca_component)
                         # Load pca model if it exists, otherwise fit it
-                        pca_path = os.path.join(pca_dir, f'{subj}_{model_layer_id}_pca_{pca_component}.pkl')
-                        if os.path.exists(pca_path):
+                        pca_path = os.path.join(pca_dir, f'{model_layer_id}_pca_{pca_component}.pkl')
+                        if os.path.exists(pca_path) and load_save_pca:
                             print(f"\n Loading PCA model from: {pca_path}\n")
                             with open(pca_path, 'rb') as pickle_file:
                                 pca = pickle.load(pickle_file)
                             del pickle_file
                         else:
-                            print(f"\n Modello PCA non trovato, fitting ...\n")
+                            print(f"\n PCA Model not found or load_save_pca = False, fitting ...\n")
                             pca = fit_pca(feature_extractor,
                                             train_imgs_dataloader,
                                             pca_component,
                                             n_stacked_batches,
                                             pca_batch_size,
                                             device)
-                            if save_pca:
+                            if load_save_pca:
                                 with open(pca_path, 'wb') as pickle_file:
                                     pickle.dump(pca, pickle_file)
                                 del pickle_file
@@ -446,7 +481,8 @@ if __name__ == "__main__":
                         best_alpha_l, best_alpha_r = ridge_alpha_grid_search(features_train,  
                                                                     lh_fmri_train, 
                                                                     rh_fmri_train,
-                                                                    params_grid)
+                                                                    params_grid,
+                                                                    UseStandardScaler = standardize_features)
                         alpha_l, alpha_r = best_alpha_l, best_alpha_r
                     
                     lh_fmri_val_pred, lh_fmri_test_pred, rh_fmri_val_pred, rh_fmri_test_pred = linear_regression(regression_type, 
@@ -459,7 +495,8 @@ if __name__ == "__main__":
                                                                                                                     args.subject_test_submission_dir,
                                                                                                                     alpha_l,
                                                                                                                     alpha_r,
-                                                                                                                    grid_search = False)
+                                                                                                                    grid_search = False,
+                                                                                                                    UseStandardScaler = standardize_features)
                     
                     noise_norm_corr_dict[f'lh_{subj}'], noise_norm_corr_dict[f'rh_{subj}'] = median_squared_noisenorm_correlation(lh_fmri_val_pred, 
                                                                                                                                     rh_fmri_val_pred,
@@ -552,8 +589,19 @@ if __name__ == "__main__":
             noise_norm_corr_dict = {}
             noise_norm_corr_ROI_dict = {} 
         
+        if skip_inference_while_testing:
+            continue
         print(f'######## Starting the {color.RED} ENCODING PROCEDURE {color.END} ######## \n')
         # importing the correct config file that will define all the model-layers used
+        extraction_config_file = config_dict[str(subj)]['extraction_config_file']
+        config_subj = config_dict[str(subj)]['config_subj']
+        extraction_config_folder = f'config_subj{config_subj}'
+        parent_config_dir = f'./files/{extraction_config_folder}/{config_name}'
+        global_config_dir = f'./files/{extraction_config_folder}/global'
+        print(f'# Using config file: {color.BOLD} subj{config_subj}_{extraction_config_file} + {color.END}\n')
+        if not os.path.isdir(parent_config_dir) and save and test_the_layers:
+            os.makedirs(parent_config_dir)
+        print(f'# Using config file: {color.BOLD} subj{config_subj}_{extraction_config_file} + {color.END} # \n')
         if config_file_mode == 'global' and test_the_layers:
             # if i want the global best performing config using the one i just tested
             final_extraction_config = extraction_config_overall
@@ -626,7 +674,7 @@ if __name__ == "__main__":
                     model_layer_id = f'{feature_model_type}+{model_layer}+{transform_string}+{regression_type}'
                 else:
                     model_layer_id = f'{feature_model_type}+{"&".join(model_layer)}+{transform_string}+{regression_type}'
-                print('############################ Model Layer: ' + model_layer + ' ############################ \n')
+                print('############################ Model Layer: ' + str(model_layer) + ' ############################ \n')
                 # Definining paths to data and submission directories ##
                 args = argObj(subj, data_home_dir, data_dir, parent_submission_dir, ncsnr_dir, images_trials_dir, save) 
                 # Obtain the indices of the training, validation and test data
@@ -655,21 +703,21 @@ if __name__ == "__main__":
                                                                             batch_size,
                                                                             min_pca_batch_size,
                                                                             pca_component)
-                    pca_path = os.path.join(pca_dir, f'{subj}_{model_layer_id}_pca_{pca_component}.pkl')
-                    if os.path.exists(pca_path):
+                    pca_path = os.path.join(pca_dir, f'{model_layer_id}_pca_{pca_component}.pkl')
+                    if os.path.exists(pca_path) and load_save_pca:
                         print(f"\n Loading PCA model from: {pca_path}\n")
                         with open(pca_path, 'rb') as pickle_file:
                             pca = pickle.load(pickle_file)
                         del pickle_file
                     else:
-                        print(f"\n PCA model not found, fitting ...\n")
+                        print(f"\n PCA model not found or load_save_pca = False, fitting ...\n")
                         pca = fit_pca(feature_extractor,
                                         train_imgs_dataloader,
                                         pca_component,
                                         n_stacked_batches,
                                         pca_batch_size,
                                         device)
-                        if save_pca:
+                        if load_save_pca:
                             with open(pca_path, 'wb') as pickle_file:
                                 pickle.dump(pca, pickle_file)
                             del pickle_file
@@ -725,7 +773,8 @@ if __name__ == "__main__":
                     best_alpha_l, best_alpha_r = ridge_alpha_grid_search(features_train,  
                                                                     lh_fmri_train, 
                                                                     rh_fmri_train,
-                                                                    params_grid)
+                                                                    params_grid,
+                                                                    UseStandardScaler = standardize_features)
                     alpha_l, alpha_r = best_alpha_l, best_alpha_r
                     # Updating the config file
                     alpha_df_temp = pd.DataFrame({
@@ -747,8 +796,9 @@ if __name__ == "__main__":
                                                                                                                 alpha_l = alpha_l,
                                                                                                                 alpha_r = alpha_r,
                                                                                                                 grid_search = False,
-                                                                                                                param_grid = params_grid)
-                
+                                                                                                                param_grid = params_grid,
+                                                                                                                UseStandardScaler = standardize_features)
+
                 # generate the create the voxel mask for the current model-layer-specific set of ROIs
                 lh_roi_mask, rh_roi_mask = load_roi_masks_challenge_from_list_of_ROI(args.roi_dir_enhanced, final_extraction_config, [feature_model_type, model_layer, transform_string, regression_type])
                 

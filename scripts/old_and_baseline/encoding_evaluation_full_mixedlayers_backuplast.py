@@ -129,6 +129,15 @@ if __name__ == "__main__":
         pca_component = 2048
         min_pca_batch_size = pca_component + 300 # pca_component * 2
         
+        # feature_model_type = "alexnet" #@param ["alexnet", "ZFNet", "RetinaNet","resnet50", "vgg16","vgg19_bn" , "efficientnetb2", "efficientnetb2lib"]
+        # model_layers = ["features.2", "features.12"] 
+
+        # create a dictionary to store the model layers
+        # ["alexnet", "ZFNet", "resnet50", "vgg16","vgg19_bn" , "efficientnetb2", "efficientnetb2lib"]
+        
+        # combining_mode = 'concat' #@param ["single", "concat", "mixed"]
+        # test_models_layers = {'alexnet': [['features.11', 'features.12'], 'features.2'],
+        #                       'ZFNet': ['features.stage3.pool3']}
         def pca_selector(model_and_layer):
             no_pca_model = ['DINOv2s','DINOv2b','DINOv2l','DINOv2g']
             no_pca = [['DINOv2', 'DINOv2'], ['efficientnetb2', 'avgpool'], ['efficientnetb2', 'flatten']]
@@ -196,6 +205,10 @@ if __name__ == "__main__":
                 print('No preprocessing selected, using imagenet_transform_alt')
                 return image_preprocessing.imagenet_transform_alt, 'imagenet_transform_alt'
         
+        # test_models_layers = {'DINOv2l': [['15','16','17','18','19'], ['19','20','21']],
+        #                       'dino_res50': ['layer2.3.relu', 'layer4.0.relu', 'layer4.1.relu'],
+        #                       'RetinaNet': ['body.layer3.5.relu_2','body.layer3.0.relu_2']}
+        
         test_models_layers = {#'ViT_GPT2': [['decoder.9', 'decoder.10', 'decoder.11', 'decoder.12']],
                               'DINOv2s': [['0', '1', '2'],'2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
                               'DINOv2b': ['2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
@@ -209,33 +222,18 @@ if __name__ == "__main__":
                               'vgg16': ['avgpool'],
                               'vgg19': ['avgpool', 'features.33', 'features.35'],
                                # 'vgg16_bn': [ 'features.36','features.39','features.42','avgpool'],
-                              'vgg19_bn': ['avgpool', 'features.51', 'features.45', 'features.42']} 
+                              'vgg19_bn': ['avgpool', 'features.51', 'features.45', 'features.42']}
         
         ## testing parameters
-        test_the_layers = True #@param ["True", "False"] 
-        test_a_config = True
-        skip_inference_while_testing = True
-        
+        test_the_layers = False #@param ["True", "False"] 
         # retest all the layers even if they have been tested before
         force_test = False #@param ["True", "False"]
         config_subj = 1
         extraction_config_folder = f'config_subj{config_subj}'
-        extraction_config_file = 'config_0.64732.json'
-        # extract the layers to test from the config file (if test_a_config is True)
-        if test_a_config:
-            global_config_dir = f'./files/{extraction_config_folder}/global'
-            with open(os.path.join(global_config_dir, extraction_config_file), 'r') as json_file:
-                    final_extraction_config = json.load(json_file)
-            # remove useless ROIs from the config file
-            keys_to_remove = ['All vertices', 'Unknown ROI', 'Unknown Stream']
-            for key in keys_to_remove:
-                if key in final_extraction_config:
-                    del final_extraction_config[key]
-            test_models_layers = json_config_to_feature_extraction_dict(final_extraction_config)
-            
+        
         ## Define the subject to test/inference  on
-        start_subj = 2
-        end_subj = 5
+        start_subj = 6
+        end_subj = 8
 
         ## config INFERENCE parameters 
         # Config file name (global will point to the "global" config folder)
@@ -250,6 +248,7 @@ if __name__ == "__main__":
                         '7': {'extraction_config_file' : 'config_0.55162.json', 'config_subj': 6},
                         '8': {'extraction_config_file' : 'config_0.55162.json', 'config_subj': 6}}
         
+        # extraction_config_file = 'config_0.64732.json'
 
         # Create a submission folder and save the resulting files ?
         save = True 
@@ -264,13 +263,13 @@ if __name__ == "__main__":
         #params_grid = {'alpha': [1, 10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6, 2e6]}
 
     ### Path definition
-    # model_layer_full = '_'.join([
-    #     '{}_{}'.format(model.upper(), '+'.join(transform_layers_test(layers)))
-    #     for model, layers in test_models_layers.items()
-    # ])
+    model_layer_full = '_'.join([
+        '{}_{}'.format(model.upper(), '+'.join(transform_layers_test(layers)))
+        for model, layers in test_models_layers.items()
+    ])
 
     datetime_id = strftime("(%Y-%m-%d_%H-%M)")
-    # submission_name = f'{strftime("(%Y-%m-%d_%H-%M)")}-{model_layer_full}-PCA_{pca_component}-{regression_type.upper()}-ALPHA_{"{:.1e}".format(alpha_l)}'
+    submission_name = f'{strftime("(%Y-%m-%d_%H-%M)")}-{model_layer_full}-PCA_{pca_component}-{regression_type.upper()}-ALPHA_{"{:.1e}".format(alpha_l)}'
 
 
     ### Path definition
@@ -288,14 +287,14 @@ if __name__ == "__main__":
     submission_name = config_name + "_" + str.upper(regression_type) + f'{strftime("(%Y-%m-%d)")}'
     parent_submission_dir = f'./files/submissions/{submission_name}'
     # folders where the config files will be saved (global and local best performing layers)
-    # parent_config_dir = f'./files/{extraction_config_folder}/{config_name}'
-    # global_config_dir = f'./files/{extraction_config_folder}/global'
+    parent_config_dir = f'./files/{extraction_config_folder}/{config_name}'
+    global_config_dir = f'./files/{extraction_config_folder}/global'
     pca_dir = './files/pca'
     if not os.path.isdir(parent_submission_dir + '_TEST') and save and test_the_layers:
         parent_submission_dir = parent_submission_dir + '_TEST'
         os.makedirs(parent_submission_dir)
-    # if not os.path.isdir(parent_config_dir) and save and test_the_layers:
-    #     os.makedirs(parent_config_dir)
+    if not os.path.isdir(parent_config_dir) and save and test_the_layers:
+        os.makedirs(parent_config_dir)
     print(submission_name + "\n")
     
     # define the dictionary to store the correlation values
@@ -317,13 +316,6 @@ if __name__ == "__main__":
             counter_layers_to_test = 0
             first_iteration = True
             
-            # set the config dir 
-            config_subj = subj
-            extraction_config_folder = f'config_subj{config_subj}'
-            parent_config_dir = f'./files/{extraction_config_folder}/{config_name}'
-            global_config_dir = f'./files/{extraction_config_folder}/global'
-            if not os.path.isdir(parent_config_dir) and save and test_the_layers:
-                os.makedirs(parent_config_dir)
             # Importing the df containing ROI_wise accuracy for all the layers tested in the past
             median_roi_correlation_df_global = pd.read_csv(os.path.join(global_config_dir, 
                                                                         f"scores_subj_layer_roi.csv"), index_col=0)
@@ -334,13 +326,7 @@ if __name__ == "__main__":
             for feature_model_type, model_layers in test_models_layers.items():
                 for model_layer in model_layers:
                     counter_layers_to_test += 1
-                    if test_a_config:
-                        transform_string = model_layer[1]
-                        transform = transform_dict[transform_string]
-                        regression_type = model_layer[2]
-                        model_layer = model_layer[0]
-                    else:
-                        transform, transform_string = test_preprocessing_selector(feature_model_type)
+                    transform, transform_string = test_preprocessing_selector(feature_model_type)
                     print(f'\n######## Testing Model: {color.BOLD + feature_model_type + color.END} Layer(s): {color.BOLD + str(model_layer) + color.END}  - Transform: {color.BOLD + str(transform_string) + color.END} - Regression Type: {color.BOLD + str(regression_type) + color.END} {counter_layers_to_test}/{totale_layers_to_test} ######## \n')
                     # first of all i verify that the couple model+layer has never been tested before
                     # in positive case i will use the old score and do not re-test the specific layer (minimum variation in accuracy is exected)
@@ -587,8 +573,6 @@ if __name__ == "__main__":
             noise_norm_corr_dict = {}
             noise_norm_corr_ROI_dict = {} 
         
-        if skip_inference_while_testing:
-            continue
         print(f'######## Starting the {color.RED} ENCODING PROCEDURE {color.END} ######## \n')
         # importing the correct config file that will define all the model-layers used
         extraction_config_file = config_dict[str(subj)]['extraction_config_file']

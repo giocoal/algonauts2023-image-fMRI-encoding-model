@@ -146,6 +146,7 @@ class argObj:
         test_img_list.sort()
                 
         ## Create the training, validation and test partitions indices ##
+        # i set the random seed to 5 to have the same split for all the models
         rand_seed = 5 #@param
         np.random.seed(rand_seed)
         # train_percentage = 90
