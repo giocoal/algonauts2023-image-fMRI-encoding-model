@@ -1,0 +1,161 @@
+{
+    "V1v": [
+        "alexnet",
+        "features.11"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "V1d": [
+        "alexnet",
+        "features.11"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "V2v": [
+        "alexnet",
+        "features.11"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "V2d": [
+        "alexnet",
+        "features.11"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "V3v": [
+        "alexnet",
+        "features.11"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "V3d": [
+        "alexnet",
+        "features.11"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "hV4": [
+        "alexnet",
+        "features.11"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "EBA": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "FBA-1": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "FBA-2": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "mTL-bodies": NaN,
+    "OFA": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "FFA-1": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "FFA-2": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "mTL-faces": NaN,
+    "aTL-faces": NaN,
+    "OPA": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "PPA": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "RSC": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "OWFA": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "VWFA-1": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "VWFA-2": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "mfs-words": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "mTL-words": NaN,
+    "early": [
+        "alexnet",
+        "features.11"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "midventral": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "midlateral": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "midparietal": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "ventral": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "lateral": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "parietal": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "All vertices": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "Unknown ROI": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "Unknown Stream": [
+        "alexnet",
+        "features.11"
+    ,"imagenet_transform_alt",
+        "ridge"],
+    "Unknown": [
+        "ZFNet",
+        "features.stage3.pool3"
+    ,"imagenet_transform_alt",
+        "ridge"]
+}

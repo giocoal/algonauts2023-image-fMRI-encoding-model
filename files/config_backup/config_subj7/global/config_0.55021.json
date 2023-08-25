@@ -1,0 +1,192 @@
+{
+    "V1v": [
+        "resnet50",
+        "layer3.1.relu",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "V1d": [
+        "resnet50",
+        "layer3.1.relu",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "V2v": [
+        "resnet50",
+        "layer3.1.relu",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "V2d": [
+        "resnet50",
+        "layer3.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "V3v": [
+        "resnet50",
+        "layer3.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "V3d": [
+        "resnet50",
+        "layer3.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "hV4": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge"
+    ],
+    "EBA": [
+        "resnet50",
+        "layer4.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "FBA-1": NaN,
+    "FBA-2": [
+        "DINOv2",
+        "DINOv2",
+        "dinov2_transform",
+        "ridge"
+    ],
+    "mTL-bodies": NaN,
+    "OFA": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge"
+    ],
+    "FFA-1": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge"
+    ],
+    "FFA-2": [
+        "efficientnetb2",
+        "features.7.0.block.3",
+        "efficientnetb2_transform",
+        "ridge"
+    ],
+    "mTL-faces": NaN,
+    "aTL-faces": NaN,
+    "OPA": [
+        "resnet50",
+        "layer4.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "PPA": [
+        "resnet50",
+        "layer4.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "RSC": [
+        "efficientnetb2",
+        "features.7.0.block.3",
+        "efficientnetb2_transform",
+        "ridge"
+    ],
+    "OWFA": [
+        "dino_res50",
+        "layer4.0.relu",
+        "dino_resnet50_preprocess",
+        "ridge"
+    ],
+    "VWFA-1": [
+        "resnet50",
+        "layer4.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "VWFA-2": [
+        "resnet50",
+        "layer4.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "mfs-words": [
+        "resnet50",
+        "layer4.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "mTL-words": [
+        "vgg19",
+        "avgpool",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "early": [
+        "resnet50",
+        "layer3.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "midventral": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge"
+    ],
+    "midlateral": [
+        "dino_res50",
+        "layer4.0.relu",
+        "dino_resnet50_preprocess",
+        "ridge"
+    ],
+    "midparietal": [
+        "resnet50",
+        "layer4.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "ventral": [
+        "resnet50",
+        "layer4.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "lateral": [
+        "efficientnetb2",
+        "features.7.0.block.3",
+        "efficientnetb2_transform",
+        "ridge"
+    ],
+    "parietal": [
+        "resnet50",
+        "layer4.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "All vertices": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge"
+    ],
+    "Unknown ROI": [
+        "resnet50",
+        "layer4.1.relu",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "Unknown Stream": [
+        "resnet50",
+        "layer3.1.relu",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "Unknown": [
+        "resnet50",
+        "avgpool",
+        "imagenet_V2_transform",
+        "ridge"
+    ]
+}

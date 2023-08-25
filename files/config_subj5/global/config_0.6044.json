@@ -1,0 +1,223 @@
+{
+    "V1v": [
+        "RetinaNet",
+        "body.layer3.5.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048"
+    ],
+    "V1d": [
+        "RetinaNet",
+        "body.layer3.5.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048"
+    ],
+    "V2v": [
+        "RetinaNet",
+        "body.layer3.5.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048"
+    ],
+    "V2d": [
+        "RetinaNet",
+        "body.layer3.5.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048"
+    ],
+    "V3v": [
+        "RetinaNet",
+        "body.layer3.5.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048"
+    ],
+    "V3d": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "hV4": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "EBA": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "FBA-1": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "FBA-2": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "mTL-bodies": NaN,
+    "OFA": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "FFA-1": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "FFA-2": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "mTL-faces": NaN,
+    "aTL-faces": NaN,
+    "OPA": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "PPA": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "RSC": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "OWFA": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "VWFA-1": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "VWFA-2": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "mfs-words": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "mTL-words": NaN,
+    "early": [
+        "RetinaNet",
+        "body.layer3.5.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048"
+    ],
+    "midventral": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "midlateral": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "midparietal": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "ventral": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "lateral": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "parietal": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "All vertices": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "Unknown ROI": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "Unknown Stream": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ],
+    "Unknown": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge",
+        "2048"
+    ]
+}

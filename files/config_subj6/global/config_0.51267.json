@@ -3,7 +3,8 @@
         "alexnet",
         "features.1",
         "imagenet_V2_transform",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "V1d": [
         "alexnet",
@@ -13,7 +14,8 @@
             "features.12"
         ],
         "imagenet_V2_transform",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "V2v": [
         "alexnet",
@@ -23,7 +25,8 @@
             "features.12"
         ],
         "imagenet_V2_transform",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "V2d": [
         "alexnet",
@@ -33,7 +36,8 @@
             "features.12"
         ],
         "imagenet_V2_transform",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "V3v": [
         "alexnet",
@@ -43,7 +47,8 @@
             "features.12"
         ],
         "imagenet_V2_transform",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "V3d": [
         "alexnet",
@@ -53,7 +58,8 @@
             "features.12"
         ],
         "imagenet_V2_transform",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "hV4": [
         "DINOv2l",
@@ -65,7 +71,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "EBA": [
         "DINOv2l",
@@ -77,7 +84,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "FBA-1": [
         "DINOv2l",
@@ -89,7 +97,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "FBA-2": [
         "DINOv2l",
@@ -101,7 +110,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "mTL-bodies": [
         "DINOv2l",
@@ -113,7 +123,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "OFA": [
         "DINOv2l",
@@ -125,7 +136,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "FFA-1": [
         "DINOv2l",
@@ -137,7 +149,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "FFA-2": [
         "DINOv2l",
@@ -149,7 +162,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "mTL-faces": NaN,
     "aTL-faces": NaN,
@@ -163,7 +177,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "PPA": [
         "DINOv2l",
@@ -175,7 +190,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "RSC": [
         "DINOv2l",
@@ -187,7 +203,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "OWFA": [
         "DINOv2l",
@@ -199,7 +216,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "VWFA-1": [
         "DINOv2l",
@@ -211,7 +229,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "VWFA-2": [
         "DINOv2l",
@@ -223,7 +242,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "mfs-words": [
         "DINOv2l",
@@ -235,7 +255,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "mTL-words": [
         "DINOv2l",
@@ -247,7 +268,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "early": [
         "alexnet",
@@ -257,7 +279,8 @@
             "features.12"
         ],
         "imagenet_V2_transform",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "midventral": [
         "DINOv2l",
@@ -269,7 +292,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "midlateral": [
         "DINOv2l",
@@ -281,7 +305,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "midparietal": [
         "DINOv2l",
@@ -293,7 +318,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "ventral": [
         "DINOv2l",
@@ -305,7 +331,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "lateral": [
         "DINOv2l",
@@ -317,7 +344,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "parietal": [
         "DINOv2l",
@@ -329,7 +357,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "All vertices": [
         "DINOv2l",
@@ -341,7 +370,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "Unknown ROI": [
         "DINOv2l",
@@ -353,7 +383,8 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "Unknown Stream": [
         "alexnet",
@@ -363,7 +394,8 @@
             "features.12"
         ],
         "imagenet_V2_transform",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "Unknown": [
         "DINOv2l",
@@ -375,6 +407,7 @@
             "19"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ]
 }

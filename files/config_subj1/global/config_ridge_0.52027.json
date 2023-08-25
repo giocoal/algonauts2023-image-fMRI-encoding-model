@@ -1,130 +1,161 @@
 {
     "V1v": [
         "ZFNet",
-        "features.stage2.unit1.activ"
+        "features.stage2.unit1.activ",
+        "2048"
     ],
     "V1d": [
         "ZFNet",
-        "features.stage2.unit1.activ"
+        "features.stage2.unit1.activ",
+        "2048"
     ],
     "V2v": [
         "alexnet",
-        "features.7"
+        "features.7",
+        "2048"
     ],
     "V2d": [
         "alexnet",
-        "features.7"
+        "features.7",
+        "2048"
     ],
     "V3v": [
         "alexnet",
-        "features.7"
+        "features.7",
+        "2048"
     ],
     "V3d": [
         "alexnet",
-        "features.7"
+        "features.7",
+        "2048"
     ],
     "hV4": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "EBA": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "FBA-1": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "FBA-2": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "mTL-bodies": NaN,
     "OFA": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "FFA-1": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "FFA-2": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "mTL-faces": NaN,
     "aTL-faces": NaN,
     "OPA": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "PPA": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "RSC": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "OWFA": [
         "alexnet",
-        "features.9"
+        "features.9",
+        "2048"
     ],
     "VWFA-1": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "VWFA-2": [
         "ZFNet",
-        "features.stage3.unit3.activ"
+        "features.stage3.unit3.activ",
+        "2048"
     ],
     "mfs-words": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "mTL-words": NaN,
     "early": [
         "alexnet",
-        "features.7"
+        "features.7",
+        "2048"
     ],
     "midventral": [
         "alexnet",
-        "features.9"
+        "features.9",
+        "2048"
     ],
     "midlateral": [
         "alexnet",
-        "features.9"
+        "features.9",
+        "2048"
     ],
     "midparietal": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "ventral": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "lateral": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "parietal": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "All vertices": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "Unknown ROI": [
         "ZFNet",
-        "features.stage3.pool3"
+        "features.stage3.pool3",
+        "2048"
     ],
     "Unknown Stream": [
         "alexnet",
-        "features.7"
+        "features.7",
+        "2048"
     ],
     "Unknown": [
         "ZFNet",
-        "features.stage3.unit3.activ"
+        "features.stage3.unit3.activ",
+        "2048"
     ]
 }

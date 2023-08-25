@@ -212,8 +212,8 @@ if __name__ == "__main__":
                               'vgg19_bn': ['avgpool', 'features.51', 'features.45', 'features.42']} 
         
         ## testing parameters
-        test_the_layers = True #@param ["True", "False"] 
-        test_a_config = True
+        test_the_layers = False #@param ["True", "False"] 
+        test_a_config = False
         skip_inference_while_testing = True
         
         # retest all the layers even if they have been tested before
@@ -234,21 +234,22 @@ if __name__ == "__main__":
             test_models_layers = json_config_to_feature_extraction_dict(final_extraction_config)
             
         ## Define the subject to test/inference  on
-        start_subj = 2
-        end_subj = 5
+        start_subj = 1
+        end_subj = 8
+        # subjects_to_test = [2,3,4,5,8]
 
         ## config INFERENCE parameters 
         # Config file name (global will point to the "global" config folder)
         config_file_mode = 'global' #@param ["global", "local"]
         # which configuration to use
         config_dict = {'1': {'extraction_config_file' : 'config_0.64732.json', 'config_subj': 1},
-                        '2': {'extraction_config_file' : 'config_0.64732.json', 'config_subj': 1},
-                        '3': {'extraction_config_file' : 'config_0.64732.json', 'config_subj': 1},
-                        '4': {'extraction_config_file' : 'config_0.64732.json', 'config_subj': 1},
-                        '5': {'extraction_config_file' : 'config_0.64732.json', 'config_subj': 1},
+                        '2': {'extraction_config_file' : 'config_0.61784.json', 'config_subj': 2},
+                        '3': {'extraction_config_file' : 'config_0.64438.json', 'config_subj': 3},
+                        '4': {'extraction_config_file' : 'config_0.67311.json', 'config_subj': 4},
+                        '5': {'extraction_config_file' : 'config_0.65844.json', 'config_subj': 5},
                         '6': {'extraction_config_file' : 'config_0.55162.json', 'config_subj': 6},
-                        '7': {'extraction_config_file' : 'config_0.55162.json', 'config_subj': 6},
-                        '8': {'extraction_config_file' : 'config_0.55162.json', 'config_subj': 6}}
+                        '7': {'extraction_config_file' : 'config_0.57405.json', 'config_subj': 7},
+                        '8': {'extraction_config_file' : 'config_0.59776.json', 'config_subj': 8}}
         
 
         # Create a submission folder and save the resulting files ?
@@ -257,11 +258,12 @@ if __name__ == "__main__":
 
         regression_type = "ridge" #@param ["linear", "ridge"]
         standardize_features = False #@param ["True", "False"]
-        grid_search = True
+        grid_search = False
         alpha_l = 1e5
         alpha_r = 1e5
-        params_grid = {'alpha': [0.000001, 0.00001, 0.0001,0.001,0.01,0.1, 1, 10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6, 2e6]}
-        #params_grid = {'alpha': [1, 10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6, 2e6]}
+        #params_grid = {'alpha': [0.000001, 0.00001, 0.0001,0.001,0.01,0.1, 1, 10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6, 2e6]}
+        params_grid = {'alpha': [1, 10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6, 2e6]}
+        #params_grid = {'alpha': [1]}
 
     ### Path definition
     # model_layer_full = '_'.join([
@@ -302,7 +304,7 @@ if __name__ == "__main__":
     noise_norm_corr_dict = {}
     noise_norm_corr_ROI_dict = {} 
     datetime_id = strftime("(%Y-%m-%d_%H-%M)")
-    for subj in list(range(start_subj, end_subj+1)):
+    for subj in list(range(start_subj, end_subj + 1)):
         print(f'############################ {color.BOLD + color.RED} Subject: {str(subj)} {color.END + color.END} ############################ \n')
         if test_the_layers == True:
             '''
@@ -587,7 +589,7 @@ if __name__ == "__main__":
             noise_norm_corr_dict = {}
             noise_norm_corr_ROI_dict = {} 
         
-        if skip_inference_while_testing:
+        if test_the_layers and skip_inference_while_testing:
             continue
         print(f'######## Starting the {color.RED} ENCODING PROCEDURE {color.END} ######## \n')
         # importing the correct config file that will define all the model-layers used
@@ -637,6 +639,10 @@ if __name__ == "__main__":
         parent_submission_dir = f'./files/submissions/{submission_name}'
         if not os.path.isdir(parent_submission_dir) and save:
             os.makedirs(parent_submission_dir)
+        # save config files used if not already saved
+        if os.path.exists(os.path.join(parent_submission_dir, 'config_used.json')):
+            with open(os.path.join(parent_submission_dir, 'config_used.json'), 'w') as file:
+                json.dump(config_dict, file, indent=4)
         print(submission_name + "\n")
         
         # Dataframe to save the results of the validation on every subjects

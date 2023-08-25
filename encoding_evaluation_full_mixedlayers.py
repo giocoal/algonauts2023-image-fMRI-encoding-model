@@ -23,7 +23,7 @@ from src import image_preprocessing
 from src.feature_extraction import model_loader, fit_pca, pca_batch_calculator, extract_and_pca_features, extract_features_no_pca
 from src.encoding import linear_regression, ridge_alpha_grid_search
 from src.evaluation_metrics import median_squared_noisenorm_correlation
-from src.visualize import histogram, box_plot, noise_norm_corr_ROI, final_subj_corr_dataframe_boxplot_istograms, color, noise_norm_corr_ROI_df, find_best_performing_layer, json_config_to_feature_extraction_dict, median_squared_noisenorm_correlation_dataframe_results
+from src.visualize import histogram, box_plot, noise_norm_corr_ROI, final_subj_corr_dataframe_boxplot_istograms, color, noise_norm_corr_ROI_df, find_best_performing_layer, json_config_to_feature_extraction_dict_5, median_squared_noisenorm_correlation_dataframe_results
 
 ### Cuda setup and check
 import torch
@@ -197,6 +197,7 @@ if __name__ == "__main__":
                 return image_preprocessing.imagenet_transform_alt, 'imagenet_transform_alt'
         
         test_models_layers = {#'ViT_GPT2': [['decoder.9', 'decoder.10', 'decoder.11', 'decoder.12']],
+                              'alexnet': ['features.10', 'features.11', 'features.12'],
                               'DINOv2s': [['0', '1', '2'],'2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
                               'DINOv2b': ['2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
                               'DINOv2l': ['2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['11','12','13'], ['13','14','15'], ['11','12','13','14','15'], ['15','16','17'], ['17','18','19'], ['15','16','17','18','19'], ['19','20','21'], ['22','23'], ['19','20','21','22','23']],
@@ -213,7 +214,7 @@ if __name__ == "__main__":
         
         ## testing parameters
         test_the_layers = True #@param ["True", "False"] 
-        test_a_config = True
+        test_a_config = False
         skip_inference_while_testing = True
         
         # retest all the layers even if they have been tested before
@@ -231,11 +232,11 @@ if __name__ == "__main__":
             for key in keys_to_remove:
                 if key in final_extraction_config:
                     del final_extraction_config[key]
-            test_models_layers = json_config_to_feature_extraction_dict(final_extraction_config)
+            test_models_layers = json_config_to_feature_extraction_dict_5(final_extraction_config)
             
         ## Define the subject to test/inference  on
         start_subj = 2
-        end_subj = 5
+        end_subj = 8
 
         ## config INFERENCE parameters 
         # Config file name (global will point to the "global" config folder)
@@ -261,8 +262,8 @@ if __name__ == "__main__":
         grid_search = True
         alpha_l = 1e5
         alpha_r = 1e5
-        params_grid = {'alpha': [0.000001, 0.00001, 0.0001,0.001,0.01,0.1, 1, 10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6, 2e6]}
-        #params_grid = {'alpha': [1, 10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6, 2e6]}
+        #params_grid = {'alpha': [0.000001, 0.00001, 0.0001,0.001,0.01,0.1, 1, 10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6, 2e6]}
+        params_grid = {'alpha': [1, 10, 100, 1e3, 1e4, 2e4, 5e4, 1e5, 1e6, 2e6]}
 
     ### Path definition
     # model_layer_full = '_'.join([
@@ -338,20 +339,22 @@ if __name__ == "__main__":
                     if test_a_config:
                         transform_string = model_layer[1]
                         transform = transform_dict[transform_string]
-                        regression_type = model_layer[2]
+                        regression_type = model_layer[2] 
+                        pca_component = int(model_layer[3])
+                        compute_pca = False if pca_component == 9999999 else True
                         model_layer = model_layer[0]
-                        
                     else:
                         transform, transform_string = test_preprocessing_selector(feature_model_type)
-                    print(f'\n######## Testing Model: {color.BOLD + feature_model_type + color.END} Layer(s): {color.BOLD + str(model_layer) + color.END}  - Transform: {color.BOLD + str(transform_string) + color.END} - Regression Type: {color.BOLD + str(regression_type) + color.END} {counter_layers_to_test}/{totale_layers_to_test} ######## \n')
+                        compute_pca = pca_selector([feature_model_type, model_layer])
+                    print(f'\n######## Testing Model: {color.BOLD + feature_model_type + color.END} Layer(s): {color.BOLD + str(model_layer) + color.END}  - Transform: {color.BOLD + str(transform_string) + color.END} - PCA: {color.BOLD + str(compute_pca) + "(" + str(pca_component) + ")" + color.END} - Regression Type: {color.BOLD + str(regression_type) + color.END} {counter_layers_to_test}/{totale_layers_to_test} ######## \n')
                     # first of all i verify that the couple model+layer has never been tested before
                     # in positive case i will use the old score and do not re-test the specific layer (minimum variation in accuracy is exected)
                     # Definining paths to data and submission directories ##
                     args = argObj(subj, data_home_dir, data_dir, parent_submission_dir, ncsnr_dir, images_trials_dir, save)
                     if isinstance(model_layer, str):
-                        model_layer_id = f'{feature_model_type}+{model_layer}+{transform_string}+{regression_type}'
+                        model_layer_id = f'{feature_model_type}+{model_layer}+{transform_string}+{regression_type}+{pca_component if compute_pca else 9999999}'
                     else:
-                        model_layer_id = f'{feature_model_type}+{"&".join(model_layer)}+{transform_string}+{regression_type}'
+                        model_layer_id = f'{feature_model_type}+{"&".join(model_layer)}+{transform_string}+{regression_type}+{pca_component if compute_pca else 9999999}'
                     
                     if model_layer_id in median_roi_correlation_df_global.index and not force_test:
                         print(color.BLUE + f'This model-layer-params: {model_layer_id} has already been tested in the past. \n' + color.END)
@@ -393,7 +396,7 @@ if __name__ == "__main__":
                         print(f'{color.RED} Model not found! {color.END}')
                         continue 
                     
-                    compute_pca = pca_selector([feature_model_type, model_layer])
+                    
                     
                     start_time_feature_extraction = time.time()
                     
@@ -404,7 +407,7 @@ if __name__ == "__main__":
                                                                                 min_pca_batch_size,
                                                                                 pca_component)
                         # Load pca model if it exists, otherwise fit it
-                        pca_path = os.path.join(pca_dir, f'{model_layer_id}_pca_{pca_component}.pkl')
+                        pca_path = os.path.join(pca_dir, f'{model_layer_id}.pkl')
                         if os.path.exists(pca_path) and load_save_pca:
                             print(f"\n Loading PCA model from: {pca_path}\n")
                             with open(pca_path, 'rb') as pickle_file:
@@ -595,6 +598,8 @@ if __name__ == "__main__":
         # importing the correct config file that will define all the model-layers used
         extraction_config_file = config_dict[str(subj)]['extraction_config_file']
         config_subj = config_dict[str(subj)]['config_subj']
+        with open(full_path, 'w') as file:
+            json.dump(final_dict, file, indent=4)
         extraction_config_folder = f'config_subj{config_subj}'
         parent_config_dir = f'./files/{extraction_config_folder}/{config_name}'
         global_config_dir = f'./files/{extraction_config_folder}/global'
@@ -627,7 +632,7 @@ if __name__ == "__main__":
                 del final_extraction_config[key]
                 
         # generating the iterable dict model:["layer1", ['layer1', 'layer2']] dictionary from the config file
-        final_models_layers = json_config_to_feature_extraction_dict(final_extraction_config)
+        final_models_layers = json_config_to_feature_extraction_dict_5(final_extraction_config)
         
         # Creating the inference folders and path
         model_layer_full = '_'.join([
@@ -636,9 +641,14 @@ if __name__ == "__main__":
         ])
         # datetime_id = strftime("(%Y-%m-%d_%H-%M)")
         submission_name = f'{datetime_id}-{model_layer_full}-PCA_{pca_component}-{regression_type.upper()}' #-ALPHA_{"{:.1e}".format(alpha_l)}'
+        # create the submission name using the config file used
         parent_submission_dir = f'./files/submissions/{submission_name}'
         if not os.path.isdir(parent_submission_dir) and save:
             os.makedirs(parent_submission_dir)
+        # save config files used if not already saved
+        if os.path.exists(os.path.join(parent_submission_dir, 'config_used.json')):
+            with open(os.path.join(parent_submission_dir, 'config_used.json'), 'w') as file:
+                json.dump(config_dict, file, indent=4)
         print(submission_name + "\n")
         
         # Dataframe to save the results of the validation on every subjects
@@ -667,13 +677,15 @@ if __name__ == "__main__":
                 transform_string = model_layer[1]
                 transform = transform_dict[transform_string]
                 regression_type = model_layer[2]
+                pca_component = int(model_layer[3])
+                compute_pca = False if pca_component == 9999999 else True
                 model_layer = model_layer[0]
-                print(f'######## Computing Model: {color.BOLD + feature_model_type + color.END} Layer(s): {color.BOLD + str(model_layer) + color.END} - Transform: {color.BOLD + str(transform_string) + color.END} - Regression Type: {color.BOLD + str(regression_type) + color.END} {counter_layers_to_test}/{totale_layers_to_test} ######## \n')
+                print(f'######## Computing Model: {color.BOLD + feature_model_type + color.END} Layer(s): {color.BOLD + str(model_layer) + color.END} - Transform: {color.BOLD + str(transform_string) + color.END} - PCA: {color.BOLD + str(compute_pca) + "(" + str(pca_component) + ")" + color.END} - Regression Type: {color.BOLD + str(regression_type) + color.END} {counter_layers_to_test}/{totale_layers_to_test} ######## \n')
                 # transform, transform_string = test_preprocessing_selector(feature_model_type)
                 if isinstance(model_layer, str):
-                    model_layer_id = f'{feature_model_type}+{model_layer}+{transform_string}+{regression_type}'
+                    model_layer_id = f'{feature_model_type}+{model_layer}+{transform_string}+{regression_type}+{regression_type}+{pca_component if compute_pca else 9999999}'
                 else:
-                    model_layer_id = f'{feature_model_type}+{"&".join(model_layer)}+{transform_string}+{regression_type}'
+                    model_layer_id = f'{feature_model_type}+{"&".join(model_layer)}+{transform_string}+{regression_type}+{regression_type}+{pca_component if compute_pca else 9999999}'
                 print('############################ Model Layer: ' + str(model_layer) + ' ############################ \n')
                 # Definining paths to data and submission directories ##
                 args = argObj(subj, data_home_dir, data_dir, parent_submission_dir, ncsnr_dir, images_trials_dir, save) 
@@ -696,14 +708,14 @@ if __name__ == "__main__":
                 except ValueError:
                     print(f'{color.RED} Model not found! {color.END}')
                     continue 
-                compute_pca = pca_selector([feature_model_type, model_layer])
+                #compute_pca = pca_selector([feature_model_type, model_layer])
                 if compute_pca:
                     # Fit the PCA model
                     pca_batch_size, n_stacked_batches = pca_batch_calculator(len(idxs_train),
                                                                             batch_size,
                                                                             min_pca_batch_size,
                                                                             pca_component)
-                    pca_path = os.path.join(pca_dir, f'{model_layer_id}_pca_{pca_component}.pkl')
+                    pca_path = os.path.join(pca_dir, f'{model_layer_id}.pkl')
                     if os.path.exists(pca_path) and load_save_pca:
                         print(f"\n Loading PCA model from: {pca_path}\n")
                         with open(pca_path, 'rb') as pickle_file:

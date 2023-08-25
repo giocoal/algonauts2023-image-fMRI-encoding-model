@@ -1,0 +1,330 @@
+{
+    "V1v": [
+        "RetinaNet",
+        "body.layer3.5.relu_2",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "V1d": [
+        "RetinaNet",
+        "body.layer3.5.relu_2",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "V2v": [
+        "RetinaNet",
+        "body.layer3.5.relu_2",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "V2d": [
+        "RetinaNet",
+        "body.layer3.5.relu_2",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "V3v": [
+        "RetinaNet",
+        "body.layer3.5.relu_2",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "V3d": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge"
+    ],
+    "hV4": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "EBA": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "FBA-1": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "FBA-2": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "mTL-bodies": NaN,
+    "OFA": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "FFA-1": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "FFA-2": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "mTL-faces": NaN,
+    "aTL-faces": NaN,
+    "OPA": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "PPA": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "RSC": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "OWFA": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "VWFA-1": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "VWFA-2": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "mfs-words": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "mTL-words": NaN,
+    "early": [
+        "RetinaNet",
+        "body.layer3.5.relu_2",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "midventral": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "midlateral": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "midparietal": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "ventral": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "lateral": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "parietal": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "All vertices": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "Unknown ROI": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ],
+    "Unknown Stream": [
+        "dino_res50",
+        "layer4.1.relu",
+        "dino_resnet50_preprocess",
+        "ridge"
+    ],
+    "Unknown": [
+        "DINOv2l",
+        [
+            "15",
+            "16",
+            "17",
+            "18",
+            "19"
+        ],
+        "dinov2_transform_V2",
+        "ridge"
+    ]
+}

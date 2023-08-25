@@ -3,43 +3,50 @@
         "dino_res50",
         "layer4.0.relu",
         "dino_resnet50_preprocess",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "V1d": [
         "dino_res50",
         "layer4.0.relu",
         "dino_resnet50_preprocess",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "V2v": [
         "dino_res50",
         "layer4.0.relu",
         "dino_resnet50_preprocess",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "V2d": [
         "dino_res50",
         "layer4.0.relu",
         "dino_resnet50_preprocess",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "V3v": [
         "dino_res50",
         "layer4.0.relu",
         "dino_resnet50_preprocess",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "V3d": [
         "dino_res50",
         "layer4.0.relu",
         "dino_resnet50_preprocess",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "hV4": [
         "dino_res50",
         "layer4.0.relu",
         "dino_resnet50_preprocess",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "EBA": [
         "DINOv2l",
@@ -49,7 +56,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "FBA-1": [
         "DINOv2l",
@@ -59,7 +67,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "FBA-2": [
         "DINOv2l",
@@ -69,7 +78,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "mTL-bodies": [
         "DINOv2l",
@@ -79,7 +89,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "OFA": [
         "DINOv2l",
@@ -89,7 +100,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "FFA-1": [
         "DINOv2l",
@@ -99,7 +111,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "FFA-2": [
         "DINOv2l",
@@ -109,7 +122,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "mTL-faces": NaN,
     "aTL-faces": NaN,
@@ -121,7 +135,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "PPA": [
         "DINOv2l",
@@ -131,7 +146,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "RSC": [
         "DINOv2l",
@@ -141,7 +157,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "OWFA": [
         "DINOv2l",
@@ -151,7 +168,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "VWFA-1": [
         "DINOv2l",
@@ -161,7 +179,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "VWFA-2": [
         "DINOv2l",
@@ -171,7 +190,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "mfs-words": [
         "DINOv2l",
@@ -181,19 +201,22 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "mTL-words": [
         "dino_res50",
         "layer4.1.relu",
         "dino_resnet50_preprocess",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "early": [
         "dino_res50",
         "layer4.0.relu",
         "dino_resnet50_preprocess",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "midventral": [
         "DINOv2l",
@@ -203,7 +226,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "midlateral": [
         "DINOv2l",
@@ -213,13 +237,15 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "midparietal": [
         "dino_res50",
         "layer4.1.relu",
         "dino_resnet50_preprocess",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "ventral": [
         "DINOv2l",
@@ -229,7 +255,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "lateral": [
         "DINOv2l",
@@ -239,7 +266,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "parietal": [
         "DINOv2l",
@@ -249,7 +277,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "All vertices": [
         "DINOv2l",
@@ -259,7 +288,8 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "Unknown ROI": [
         "DINOv2l",
@@ -269,13 +299,15 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "Unknown Stream": [
         "dino_res50",
         "layer4.0.relu",
         "dino_resnet50_preprocess",
-        "ridge"
+        "ridge",
+        "2048"
     ],
     "Unknown": [
         "DINOv2l",
@@ -285,6 +317,7 @@
             "21"
         ],
         "dinov2_transform_V2",
-        "ridge"
+        "ridge",
+        "2048"
     ]
 }

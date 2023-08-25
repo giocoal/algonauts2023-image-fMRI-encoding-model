@@ -1,0 +1,205 @@
+{
+    "V1v": [
+        "alexnet",
+        "features.7",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "V1d": [
+        "alexnet",
+        "features.7",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "V2v": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "V2d": [
+        "alexnet",
+        "features.7",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "V3v": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "V3d": [
+        "alexnet",
+        "features.7",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "hV4": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "EBA": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "FBA-1": [
+        "DINOv2",
+        "DINOvv2",
+        "dinov2_transform",
+        "ridge"
+    ],
+    "FBA-2": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "mTL-bodies": NaN,
+    "OFA": [
+        "alexnet",
+        [
+            "features.10",
+            "features.11",
+            "features.12"
+        ],
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "FFA-1": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "FFA-2": [
+        "alexnet",
+        "features.12",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "mTL-faces": NaN,
+    "aTL-faces": NaN,
+    "OPA": [
+        "alexnet",
+        [
+            "features.10",
+            "features.11",
+            "features.12"
+        ],
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "PPA": [
+        "ZFNet",
+        "features.stage3.pool3",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "RSC": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "OWFA": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "VWFA-1": [
+        "alexnet",
+        "features.12",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "VWFA-2": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "mfs-words": [
+        "alexnet",
+        "features.12",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "mTL-words": [
+        "ZFNet",
+        "features.stage3.pool3",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "early": [
+        "alexnet",
+        "features.7",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "midventral": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "midlateral": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "midparietal": [
+        "alexnet",
+        "features.12",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "ventral": [
+        "alexnet",
+        "features.12",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "lateral": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "parietal": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "All vertices": [
+        "RetinaNet",
+        "fpn",
+        "imagenet_transform_alt",
+        "ridge"
+    ],
+    "Unknown ROI": [
+        "alexnet",
+        "features.12",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "Unknown Stream": [
+        "ZFNet",
+        "features.stage3.unit2.activ",
+        "imagenet_V2_transform",
+        "ridge"
+    ],
+    "Unknown": [
+        "DINOv2",
+        "DINOvv2",
+        "dinov2_transform",
+        "ridge"
+    ]
+}
