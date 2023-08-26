@@ -11,6 +11,8 @@ from torch.utils.data import DataLoader, Dataset
 
 from src.visualize import json_config_to_feature_extraction_dict
 
+import json
+
 class ImageDataset(Dataset):
     def __init__(self, imgs_paths, idxs, transform):
         self.imgs_paths = np.array(imgs_paths)[idxs]
@@ -348,3 +350,44 @@ def load_roi_masks_challenge_from_list_of_ROI(roi_masks_enhanced_path, final_ext
             else:
                 raise ValueError(f"Errore: la riga {index} ha più di un 1.")
         return np.array(lh_mask), np.array(rh_mask)
+
+def from_config_dict_to_submission_name(config_dict, datetime_id):
+    """
+    This function creates the submission name from the config dict
+    """
+    
+    # Initialize the result string
+    result_string = ""
+
+    # Iterate through the dictionary and construct the desired string
+    for key, value in config_dict.items():
+        config_subj = value['config_subj']
+        extraction_config_file = value['extraction_config_file']
+        result_string += f"{key}_{config_subj}_{extraction_config_file}_"
+
+    # Remove the trailing underscore
+    result_string = result_string.rstrip('_')
+    return datetime_id + result_string
+
+
+def save_json_file(parent_submission_dir, config_dict):
+    if os.path.exists(os.path.join(parent_submission_dir, 'config_used.json')):
+            with open(os.path.join(parent_submission_dir, 'config_used.json'), 'w') as file:
+                json.dump(config_dict, file, indent=4)
+                
+                
+class FileNameGenerator:
+    # write the basic structure of a class
+    def __init__(self, feature_model_type, model_layer, transform_string, regression_type, pca_component, compute_pca):
+        self.feature_model_type = feature_model_type
+        self.model_layer = model_layer
+        self.transform_string = transform_string
+        self.regression_type = regression_type
+        self.pca_component = pca_component
+        self.compute_pca = compute_pca
+        
+    def model_layer_id(self):
+        if isinstance(model_layer, str):
+                model_layer_id = f'{feature_model_type}+{model_layer}+{transform_string}+{regression_type}+{pca_component if compute_pca else 9999999}'
+            else:
+                model_layer_id = f'{feature_model_type}+{"&".join(model_layer)}+{transform_string}+{regression_type}+{pca_component if compute_pca else 9999999}'
