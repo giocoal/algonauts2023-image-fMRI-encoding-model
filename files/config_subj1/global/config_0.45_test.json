@@ -4,70 +4,80 @@
         "features.11",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "V1d": [
         "alexnet",
         "features.11",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "V2v": [
         "alexnet",
         "features.11",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "V2d": [
         "alexnet",
         "features.11",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "V3v": [
         "alexnet",
         "features.11",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "V3d": [
         "alexnet",
         "features.11",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "hV4": [
         "alexnet",
         "features.11",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "EBA": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "FBA-1": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "FBA-2": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "mTL-bodies": NaN,
     "OFA": [
@@ -75,21 +85,24 @@
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "FFA-1": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "FFA-2": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "mTL-faces": NaN,
     "aTL-faces": NaN,
@@ -98,49 +111,56 @@
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "PPA": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "RSC": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "OWFA": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "VWFA-1": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "VWFA-2": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "mfs-words": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "mTL-words": NaN,
     "early": [
@@ -148,76 +168,87 @@
         "features.11",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "midventral": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "midlateral": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "midparietal": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "ventral": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "lateral": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "parietal": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "All vertices": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "Unknown ROI": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "Unknown Stream": [
         "alexnet",
         "features.11",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "Unknown": [
         "ZFNet",
         "features.stage3.pool3",
         "imagenet_transform_alt",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ]
 }

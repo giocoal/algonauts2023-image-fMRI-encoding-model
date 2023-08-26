@@ -8,7 +8,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "V1d": [
         "alexnet",
@@ -19,7 +20,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "V2v": [
         "alexnet",
@@ -30,7 +32,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "V2d": [
         "alexnet",
@@ -41,7 +44,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "V3v": [
         "alexnet",
@@ -52,7 +56,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "V3d": [
         "alexnet",
@@ -63,7 +68,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "hV4": [
         "alexnet",
@@ -74,7 +80,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "EBA": [
         "alexnet",
@@ -85,7 +92,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "FBA-1": [
         "alexnet",
@@ -96,7 +104,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "FBA-2": [
         "alexnet",
@@ -107,7 +116,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "mTL-bodies": [
         "alexnet",
@@ -118,7 +128,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "OFA": [
         "alexnet",
@@ -129,7 +140,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "FFA-1": [
         "alexnet",
@@ -140,7 +152,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "FFA-2": [
         "alexnet",
@@ -151,7 +164,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "mTL-faces": NaN,
     "aTL-faces": NaN,
@@ -164,7 +178,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "PPA": [
         "alexnet",
@@ -175,7 +190,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "RSC": [
         "alexnet",
@@ -186,7 +202,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "OWFA": [
         "alexnet",
@@ -197,7 +214,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "VWFA-1": [
         "alexnet",
@@ -208,7 +226,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "VWFA-2": [
         "alexnet",
@@ -219,7 +238,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "mfs-words": [
         "alexnet",
@@ -230,7 +250,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "mTL-words": [
         "alexnet",
@@ -241,7 +262,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "early": [
         "alexnet",
@@ -252,7 +274,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "midventral": [
         "alexnet",
@@ -263,7 +286,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "midlateral": [
         "alexnet",
@@ -274,7 +298,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "midparietal": [
         "alexnet",
@@ -285,7 +310,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "ventral": [
         "alexnet",
@@ -296,7 +322,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "lateral": [
         "alexnet",
@@ -307,7 +334,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "parietal": [
         "alexnet",
@@ -318,7 +346,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "All vertices": [
         "alexnet",
@@ -329,7 +358,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "Unknown ROI": [
         "alexnet",
@@ -340,7 +370,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "Unknown Stream": [
         "alexnet",
@@ -351,7 +382,8 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ],
     "Unknown": [
         "alexnet",
@@ -362,6 +394,7 @@
         ],
         "imagenet_V2_transform",
         "ridge",
-        "2048"
+        "2048",
+        "concat_pca"
     ]
 }

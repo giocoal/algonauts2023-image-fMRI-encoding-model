@@ -41,14 +41,23 @@ def process_csv_file(csv_path):
                 data = data.rename(index={old_label: new_label})
         
     data.to_csv(csv_path)
+    
+def process_csv_file_concat(csv_path):
+    data = pd.read_csv(csv_path, index_col=0)
+    for old_label in data.index:
+        if not pd.isna(old_label):
+            new_label = old_label + "+concat_pca"
+            data = data.rename(index={old_label: new_label})
+        
+    data.to_csv(csv_path)
 
 # file_path = f"D:\\Projects\\Thesis\\files\\config_test\\global\\alpha_subj_layer.csv"
-# process_csv_file(file_path)
+# process_csv_file_concat(file_path)
 # file_path = f"D:\\Projects\\Thesis\\files\\config_test\\global\\scores_subj_layer_roi.csv"
-# process_csv_file(file_path)
+# process_csv_file_concat(file_path)
 
 for subj in range(1, 9):
     file_path = f"D:\\Projects\\Thesis\\files\\config_subj{subj}\\global\\alpha_subj_layer.csv"
-    process_csv_file(file_path)
+    process_csv_file_concat(file_path)
     file_path = f"D:\\Projects\\Thesis\\files\\config_subj{subj}\\global\\scores_subj_layer_roi.csv"
-    process_csv_file(file_path)
+    process_csv_file_concat(file_path)

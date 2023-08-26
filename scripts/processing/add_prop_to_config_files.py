@@ -38,10 +38,25 @@ def process_json_file(file_path):
     with open(file_path, 'w') as json_file:
         json.dump(data, json_file, indent=4)
         
+def process_json_file_concat(file_path):
+    with open(file_path, 'r') as json_file:
+        data = json.load(json_file)
+        for key, value in data.items():
+            if not isinstance(value, list) or (isinstance(value, float) and math.isnan(value)):
+                continue
+            else:
+                print(value[:2])
+                value.append("concat_pca")
+        
+    with open(file_path, 'w') as json_file:
+        json.dump(data, json_file, indent=4)
+        
 for subj in range(1, 9):
     folder_path = f"D:\\Projects\\Thesis\\files\\config_subj{subj}\\global"
     #folder_path = f"D:\\Projects\\Thesis\\files\\config_test\\global"
     for filename in os.listdir(folder_path):
         if filename.endswith(".json"):
             file_path = os.path.join(folder_path, filename)
-            process_json_file(file_path)
+            process_json_file_concat(file_path)
+    if folder_path == f"D:\\Projects\\Thesis\\files\\config_test\\global":
+        break

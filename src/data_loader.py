@@ -378,16 +378,29 @@ def save_json_file(parent_submission_dir, config_dict):
                 
 class FileNameGenerator:
     # write the basic structure of a class
-    def __init__(self, feature_model_type, model_layer, transform_string, regression_type, pca_component, compute_pca):
+    def __init__(self, feature_model_type, model_layer, transform_string, regression_type, pca_component, compute_pca, pca_mode):
         self.feature_model_type = feature_model_type
         self.model_layer = model_layer
         self.transform_string = transform_string
         self.regression_type = regression_type
         self.pca_component = pca_component
         self.compute_pca = compute_pca
-        
-    def model_layer_id(self):
-        if isinstance(model_layer, str):
-                model_layer_id = f'{feature_model_type}+{model_layer}+{transform_string}+{regression_type}+{pca_component if compute_pca else 9999999}'
-            else:
-                model_layer_id = f'{feature_model_type}+{"&".join(model_layer)}+{transform_string}+{regression_type}+{pca_component if compute_pca else 9999999}'
+        self.pca_mode = pca_mode
+    def get_model_layer_id(self):
+        if isinstance(self.model_layer, str):
+            model_layer_id = f'{self.feature_model_type}+{self.model_layer}+{self.transform_string}+{self.regression_type}+{self.pca_component if self.compute_pca else 9999999}+{self.pca_mode}'
+        else:
+            model_layer_id = f'{self.feature_model_type}+{"&".join(self.model_layer)}+{self.transform_string}+{self.regression_type}+{self.pca_component if self.compute_pca else 9999999}+{self.pca_mode}'
+        return model_layer_id
+    def get_features_file_name(self, subj):
+        if isinstance(self.model_layer, str):
+            features_file_name = f'{subj}+{self.feature_model_type}+{self.model_layer}+{self.transform_string}+{self.pca_component if self.compute_pca else 9999999}'
+        else:
+            features_file_name = f'{subj}+{self.feature_model_type}+{"&".join(self.model_layer)}+{self.transform_string}+{self.pca_component if self.compute_pca else 9999999}'
+        return features_file_name + "_train", features_file_name + "_val", features_file_name + "_test"
+    def get_pca_file_name(self):
+        if isinstance(self.model_layer, str):
+            pca_file_name = f'{self.feature_model_type}+{self.model_layer}+{self.transform_string}+{self.pca_component if self.compute_pca else 9999999}'
+        else:
+            pca_file_name = f'{self.feature_model_type}+{"&".join(self.model_layer)}+{self.transform_string}+{self.pca_component if self.compute_pca else 9999999}'
+        return pca_file_name

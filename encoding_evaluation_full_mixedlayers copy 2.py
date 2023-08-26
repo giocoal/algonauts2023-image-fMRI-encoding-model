@@ -18,12 +18,12 @@ from torchvision import models
 from src.cuda_checker import cuda_torch_check, memory_checker
 
 ### My modules import
-from src.data_loader import argObj, data_loaders_stimuli_fmri, transform_layers, transform_layers_test, load_roi_masks_challenge_from_list_of_ROI, from_config_dict_to_submission_name, save_json_file, FileNameGenerator
+from src.data_loader import argObj, data_loaders_stimuli_fmri, transform_layers, transform_layers_test, load_roi_masks_challenge_from_list_of_ROI, from_config_dict_to_submission_name, save_json_file
 from src import image_preprocessing
 from src.feature_extraction import model_loader, fit_pca, pca_batch_calculator, extract_and_pca_features, extract_features_no_pca
 from src.encoding import linear_regression, ridge_alpha_grid_search
 from src.evaluation_metrics import median_squared_noisenorm_correlation
-from src.visualize import histogram, box_plot, noise_norm_corr_ROI, final_subj_corr_dataframe_boxplot_istograms, color, noise_norm_corr_ROI_df, find_best_performing_layer, json_config_to_feature_extraction_dict_5, json_config_to_feature_extraction_dict_6, median_squared_noisenorm_correlation_dataframe_results
+from src.visualize import histogram, box_plot, noise_norm_corr_ROI, final_subj_corr_dataframe_boxplot_istograms, color, noise_norm_corr_ROI_df, find_best_performing_layer, json_config_to_feature_extraction_dict_5, median_squared_noisenorm_correlation_dataframe_results
 
 ### Cuda setup and check
 import torch
@@ -128,9 +128,6 @@ if __name__ == "__main__":
         compute_pca = True
         pca_component = 2048
         min_pca_batch_size = pca_component + 300 # pca_component * 2
-        # 'pca_mode' is the parameter used to define if the PCA will be computed on the concatenated 
-        # features 'concat_pca' or on the single ones and then concatenated 'pca_concat'
-        pca_mode = 'concat_pca' #@param ['concat_pca', 'pca_concat'] {allow-input: true}
         
         def pca_selector(model_and_layer):
             no_pca_model = ['DINOv2s','DINOv2b','DINOv2l','DINOv2g']
@@ -216,8 +213,8 @@ if __name__ == "__main__":
                               'vgg19_bn': ['avgpool', 'features.51', 'features.45', 'features.42']} 
         
         ## testing parameters
-        test_the_layers = True #@param ["True", "False"] 
-        test_a_config = True
+        test_the_layers = False #@param ["True", "False"] 
+        test_a_config = False
         skip_inference_while_testing = True
         
         # retest all the layers even if they have been tested before
@@ -235,7 +232,7 @@ if __name__ == "__main__":
             for key in keys_to_remove:
                 if key in final_extraction_config:
                     del final_extraction_config[key]
-            test_models_layers = json_config_to_feature_extraction_dict_6(final_extraction_config)
+            test_models_layers = json_config_to_feature_extraction_dict_5(final_extraction_config)
             
         ## Define the subject to test/inference  on
         start_subj = 1
@@ -296,7 +293,6 @@ if __name__ == "__main__":
     # parent_config_dir = f'./files/{extraction_config_folder}/{config_name}'
     # global_config_dir = f'./files/{extraction_config_folder}/global'
     pca_dir = './files/pca'
-    features_dir = './files/donwsampled_features'
     if not os.path.isdir(parent_submission_dir + '_TEST') and save and test_the_layers:
         parent_submission_dir = parent_submission_dir + '_TEST'
         os.makedirs(parent_submission_dir)
@@ -345,7 +341,6 @@ if __name__ == "__main__":
                         transform = transform_dict[transform_string]
                         regression_type = model_layer[2] 
                         pca_component = int(model_layer[3])
-                        pca_mode = model_layer[4]
                         compute_pca = False if pca_component == 9999999 else True
                         model_layer = model_layer[0]
                     else:
@@ -356,8 +351,11 @@ if __name__ == "__main__":
                     # in positive case i will use the old score and do not re-test the specific layer (minimum variation in accuracy is exected)
                     # Definining paths to data and submission directories ##
                     args = argObj(subj, data_home_dir, data_dir, parent_submission_dir, ncsnr_dir, images_trials_dir, save)
-                    file_name_generator = FileNameGenerator(feature_model_type, model_layer, transform_string, regression_type, pca_component, compute_pca, pca_mode)
-                    model_layer_id = file_name_generator.get_model_layer_id()
+                    if isinstance(model_layer, str):
+                        model_layer_id = f'{feature_model_type}+{model_layer}+{transform_string}+{regression_type}+{pca_component if compute_pca else 9999999}'
+                    else:
+                        model_layer_id = f'{feature_model_type}+{"&".join(model_layer)}+{transform_string}+{regression_type}+{pca_component if compute_pca else 9999999}'
+                    
                     if model_layer_id in median_roi_correlation_df_global.index and not force_test:
                         print(color.BLUE + f'This model-layer-params: {model_layer_id} has already been tested in the past. \n' + color.END)
                         if first_iteration:
@@ -392,89 +390,75 @@ if __name__ == "__main__":
                     
                     train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader = data_loaders.images_dataloader(batch_size, transform)
                     
+                    try:
+                        model, feature_extractor = model_loader(feature_model_type, model_layer, device)
+                    except ValueError:
+                        print(f'{color.RED} Model not found! {color.END}')
+                        continue 
                     
                     
-                    #start_time_feature_extraction = time.time()
                     
-                    # Load the downsampled features if they exist, otherwise extract them
-                    train_features_file_name, val_features_file_name, test_features_file_name = file_name_generator.get_features_file_name(subj)
-                    train_features_file_path, val_features_file_path, test_features_file_path = os.path.join(features_dir, f'{train_features_file_path}.npy'), os.path.join(features_dir, f'{val_features_file_path}.npy'), os.path.join(features_dir, f'{test_features_file_path}.npy')
-                    if os.path.exists(train_features_file_path) and os.path.exists(val_features_file_path) and os.path.exists(test_features_file_path) and load_save_downsampled_feature:
-                        print(f"\n {color.BLUE} Loading downsampled features from: {train_features_file_path} {color.END} \n")
-                        features_train = np.load(train_features_file_path)
-                        features_val = np.load(val_features_file_path)
-                        features_test = np.load(test_features_file_path)
-                    else:
-                        print(f"{color.BLUE} Downsampled features not found, extracting them... {color.END}")
-                        try:
-                            model, feature_extractor = model_loader(feature_model_type, model_layer, device)
-                        except ValueError:
-                            print(f'{color.RED} Model not found! {color.END}')
-                            continue 
-                        if compute_pca:
-                            # Fit the PCA model
-                            pca_batch_size, n_stacked_batches = pca_batch_calculator(len(idxs_train),
-                                                                                    batch_size,
-                                                                                    min_pca_batch_size,
-                                                                                    pca_component)
-                            # Load pca model if it exists, otherwise fit it
-                            pca_file_name = file_name_generator.get_pca_file_name()
-                            pca_path = os.path.join(pca_dir, f'{pca_file_name}.pkl')
-                            if os.path.exists(pca_path) and load_save_pca:
-                                print(f"\n Loading PCA model from: {pca_path}\n")
-                                with open(pca_path, 'rb') as pickle_file:
-                                    pca = pickle.load(pickle_file)
-                                del pickle_file
-                            else:
-                                print(f"\n PCA Model not found or load_save_pca = False, fitting ...\n")
-                                pca = fit_pca(feature_extractor,
-                                                train_imgs_dataloader,
-                                                pca_component,
-                                                n_stacked_batches,
-                                                pca_batch_size,
-                                                device)
-                                if load_save_pca:
-                                    with open(pca_path, 'wb') as pickle_file:
-                                        pickle.dump(pca, pickle_file)
-                                    del pickle_file
-                            print("Comulative Explained variance ratio: ", sum(pca.explained_variance_ratio_))
-                            print("Number of components: ", pca.n_components_)
-                            
-                            print('## Extracting features from training, validation and test data...')
-                            features_train = extract_and_pca_features(feature_extractor, train_imgs_dataloader, pca, n_stacked_batches, device)
-                            features_val = extract_and_pca_features(feature_extractor, val_imgs_dataloader, pca, n_stacked_batches, device)
-                            features_test = extract_and_pca_features(feature_extractor, test_imgs_dataloader, pca, n_stacked_batches, device)
-                            
-                            # print("\n")
-                            # print('## Checking and Freeing  GPU memory...')
-                            # memory_checker()
-                            model.to('cpu') # sposto sulla ram
-                            try:
-                                feature_extractor.to('cpu') # sposto sulla ram
-                            except:
-                                pass
-                            del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
-                            torch.cuda.empty_cache() # elimino la chache vram
-                            gc.collect() # elimino la cache ram
-                            # memory_checker()
+                    start_time_feature_extraction = time.time()
+                    
+                    if compute_pca:
+                        # Fit the PCA model
+                        pca_batch_size, n_stacked_batches = pca_batch_calculator(len(idxs_train),
+                                                                                batch_size,
+                                                                                min_pca_batch_size,
+                                                                                pca_component)
+                        # Load pca model if it exists, otherwise fit it
+                        pca_path = os.path.join(pca_dir, f'{model_layer_id}.pkl')
+                        if os.path.exists(pca_path) and load_save_pca:
+                            print(f"\n Loading PCA model from: {pca_path}\n")
+                            with open(pca_path, 'rb') as pickle_file:
+                                pca = pickle.load(pickle_file)
+                            del pickle_file
                         else:
-                            print('## Extracting features from training, validation and test data...')
-                            features_train = extract_features_no_pca(feature_extractor, train_imgs_dataloader, device)
-                            features_val = extract_features_no_pca(feature_extractor, val_imgs_dataloader, device)
-                            features_test = extract_features_no_pca(feature_extractor, test_imgs_dataloader, device)
-                            
-                            model.to('cpu') # sposto sulla ram
-                            try:
-                                feature_extractor.to('cpu') # sposto sulla ram
-                            except:
-                                pass
-                            del model, feature_extractor, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
-                            torch.cuda.empty_cache() # elimino la chache vram
-                            gc.collect() # elimino la cache ram
-                        if load_save_downsampled_feature:
-                            np.save(train_features_file_path, features_train)
-                            np.save(val_features_file_path, features_val)
-                            np.save(test_features_file_path, features_test)
+                            print(f"\n PCA Model not found or load_save_pca = False, fitting ...\n")
+                            pca = fit_pca(feature_extractor,
+                                            train_imgs_dataloader,
+                                            pca_component,
+                                            n_stacked_batches,
+                                            pca_batch_size,
+                                            device)
+                            if load_save_pca:
+                                with open(pca_path, 'wb') as pickle_file:
+                                    pickle.dump(pca, pickle_file)
+                                del pickle_file
+                        print("Comulative Explained variance ratio: ", sum(pca.explained_variance_ratio_))
+                        print("Number of components: ", pca.n_components_)
+                        
+                        print('## Extracting features from training, validation and test data...')
+                        features_train = extract_and_pca_features(feature_extractor, train_imgs_dataloader, pca, n_stacked_batches, device)
+                        features_val = extract_and_pca_features(feature_extractor, val_imgs_dataloader, pca, n_stacked_batches, device)
+                        features_test = extract_and_pca_features(feature_extractor, test_imgs_dataloader, pca, n_stacked_batches, device)
+                        
+                        # print("\n")
+                        # print('## Checking and Freeing  GPU memory...')
+                        # memory_checker()
+                        model.to('cpu') # sposto sulla ram
+                        try:
+                            feature_extractor.to('cpu') # sposto sulla ram
+                        except:
+                            pass
+                        del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                        torch.cuda.empty_cache() # elimino la chache vram
+                        gc.collect() # elimino la cache ram
+                        # memory_checker()
+                    else:
+                        print('## Extracting features from training, validation and test data...')
+                        features_train = extract_features_no_pca(feature_extractor, train_imgs_dataloader, device)
+                        features_val = extract_features_no_pca(feature_extractor, val_imgs_dataloader, device)
+                        features_test = extract_features_no_pca(feature_extractor, test_imgs_dataloader, device)
+                        
+                        model.to('cpu') # sposto sulla ram
+                        try:
+                            feature_extractor.to('cpu') # sposto sulla ram
+                        except:
+                            pass
+                        del model, feature_extractor, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                        torch.cuda.empty_cache() # elimino la chache vram
+                        gc.collect() # elimino la cache ram
 
                     ## Fit the linear model ##
                     print('\n ## Fit Encoder and Predict...')
@@ -646,7 +630,7 @@ if __name__ == "__main__":
                 del final_extraction_config[key]
                 
         # generating the iterable dict model:["layer1", ['layer1', 'layer2']] dictionary from the config file
-        final_models_layers = json_config_to_feature_extraction_dict_6(final_extraction_config)
+        final_models_layers = json_config_to_feature_extraction_dict_5(final_extraction_config)
         
         # Creating the inference folders and path
         model_layer_full = '_'.join([
@@ -691,13 +675,14 @@ if __name__ == "__main__":
                 transform = transform_dict[transform_string]
                 regression_type = model_layer[2]
                 pca_component = int(model_layer[3])
-                pca_mode = model_layer[4]
                 compute_pca = False if pca_component == 9999999 else True
                 model_layer = model_layer[0]
                 print(f'######## Computing Model: {color.BOLD + feature_model_type + color.END} Layer(s): {color.BOLD + str(model_layer) + color.END} - Transform: {color.BOLD + str(transform_string) + color.END} - PCA: {color.BOLD + str(compute_pca) + "(" + str(pca_component) + ")" + color.END} - Regression Type: {color.BOLD + str(regression_type) + color.END} {counter_layers_to_test}/{totale_layers_to_test} ######## \n')
                 # transform, transform_string = test_preprocessing_selector(feature_model_type)
-                file_name_generator = FileNameGenerator(feature_model_type, model_layer, transform_string, regression_type, pca_component, compute_pca, pca_mode)
-                model_layer_id = file_name_generator.get_model_layer_id()
+                if isinstance(model_layer, str):
+                    model_layer_id = f'{feature_model_type}+{model_layer}+{transform_string}+{regression_type}+{regression_type}+{pca_component if compute_pca else 9999999}'
+                else:
+                    model_layer_id = f'{feature_model_type}+{"&".join(model_layer)}+{transform_string}+{regression_type}+{regression_type}+{pca_component if compute_pca else 9999999}'
                 print('############################ Model Layer: ' + str(model_layer) + ' ############################ \n')
                 # Definining paths to data and submission directories ##
                 args = argObj(subj, data_home_dir, data_dir, parent_submission_dir, ncsnr_dir, images_trials_dir, save) 
@@ -715,86 +700,71 @@ if __name__ == "__main__":
                 
                 train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader = data_loaders.images_dataloader(batch_size, transform)
                 
-                # Load the downsampled features if they exist, otherwise extract them
-                train_features_file_name, val_features_file_name, test_features_file_name = file_name_generator.get_features_file_name(subj)
-                train_features_file_path, val_features_file_path, test_features_file_path = os.path.join(features_dir, f'{train_features_file_name}.npy'), os.path.join(features_dir, f'{val_features_file_name}.npy'), os.path.join(features_dir, f'{test_features_file_name}.npy')
-                if os.path.exists(train_features_file_path) and os.path.exists(val_features_file_path) and os.path.exists(test_features_file_path) and load_save_downsampled_feature:
-                    print(f"\n {color.BLUE} Loading downsampled features from: {train_features_file_path} {color.END} \n")
-                    features_train = np.load(train_features_file_path)
-                    features_val = np.load(val_features_file_path)
-                    features_test = np.load(test_features_file_path)
-                else:
-                    print(f" {color.BLUE} Downsampled features not found, extracting them... {color.END} ")
-                    try:
-                        model, feature_extractor = model_loader(feature_model_type, model_layer, device)
-                    except ValueError:
-                        print(f'{color.RED} Model not found! {color.END}')
-                        continue 
-                    #compute_pca = pca_selector([feature_model_type, model_layer])
-                    if compute_pca:
-                        # Fit the PCA model
-                        pca_batch_size, n_stacked_batches = pca_batch_calculator(len(idxs_train),
-                                                                                batch_size,
-                                                                                min_pca_batch_size,
-                                                                                pca_component)
-                        pca_file_name = file_name_generator.get_pca_file_name()
-                        pca_path = os.path.join(pca_dir, f'{pca_file_name}.pkl')
-                        if os.path.exists(pca_path) and load_save_pca:
-                            print(f"\n Loading PCA model from: {pca_path}\n")
-                            with open(pca_path, 'rb') as pickle_file:
-                                pca = pickle.load(pickle_file)
-                            del pickle_file
-                        else:
-                            print(f"\n PCA model not found or load_save_pca = False, fitting ...\n")
-                            pca = fit_pca(feature_extractor,
-                                            train_imgs_dataloader,
-                                            pca_component,
-                                            n_stacked_batches,
-                                            pca_batch_size,
-                                            device)
-                            if load_save_pca:
-                                with open(pca_path, 'wb') as pickle_file:
-                                    pickle.dump(pca, pickle_file)
-                                del pickle_file
-            
-                        print("Comulative Explained variance ratio: ", sum(pca.explained_variance_ratio_))
-                        print("Number of components: ", pca.n_components_)
-                        
-                        print('## Extracting features from training, validation and test data...')
-                        features_train = extract_and_pca_features(feature_extractor, train_imgs_dataloader, pca, n_stacked_batches, device)
-                        features_val = extract_and_pca_features(feature_extractor, val_imgs_dataloader, pca, n_stacked_batches, device)
-                        features_test = extract_and_pca_features(feature_extractor, test_imgs_dataloader, pca, n_stacked_batches, device)
-                        
-                        # print("\n")
-                        # print('## Checking and Freeing  GPU memory...')
-                        # memory_checker()
-                        model.to('cpu') # sposto sulla ram
-                        try:
-                            feature_extractor.to('cpu') # sposto sulla ram
-                        except:
-                            pass
-                        del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
-                        torch.cuda.empty_cache() # elimino la chache vram
-                        gc.collect() # elimino la cache ram
-                        # memory_checker()
+                try:
+                    model, feature_extractor = model_loader(feature_model_type, model_layer, device)
+                except ValueError:
+                    print(f'{color.RED} Model not found! {color.END}')
+                    continue 
+                #compute_pca = pca_selector([feature_model_type, model_layer])
+                if compute_pca:
+                    # Fit the PCA model
+                    pca_batch_size, n_stacked_batches = pca_batch_calculator(len(idxs_train),
+                                                                            batch_size,
+                                                                            min_pca_batch_size,
+                                                                            pca_component)
+                    pca_path = os.path.join(pca_dir, f'{model_layer_id}.pkl')
+                    if os.path.exists(pca_path) and load_save_pca:
+                        print(f"\n Loading PCA model from: {pca_path}\n")
+                        with open(pca_path, 'rb') as pickle_file:
+                            pca = pickle.load(pickle_file)
+                        del pickle_file
                     else:
-                        print('## Extracting features from training, validation and test data...')
-                        features_train = extract_features_no_pca(feature_extractor, train_imgs_dataloader, device)
-                        features_val = extract_features_no_pca(feature_extractor, val_imgs_dataloader, device)
-                        features_test = extract_features_no_pca(feature_extractor, test_imgs_dataloader, device)
-                        
-                        model.to('cpu') # sposto sulla ram
-                        try:
-                            feature_extractor.to('cpu') # sposto sulla ram
-                        except:
-                            pass
-                        del model, feature_extractor, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
-                        torch.cuda.empty_cache() # elimino la chache vram
-                        gc.collect() # elimino la cache ram
-                    if load_save_downsampled_feature:
-                        np.save(train_features_file_path, features_train)
-                        np.save(val_features_file_path, features_val)
-                        np.save(test_features_file_path, features_test)
+                        print(f"\n PCA model not found or load_save_pca = False, fitting ...\n")
+                        pca = fit_pca(feature_extractor,
+                                        train_imgs_dataloader,
+                                        pca_component,
+                                        n_stacked_batches,
+                                        pca_batch_size,
+                                        device)
+                        if load_save_pca:
+                            with open(pca_path, 'wb') as pickle_file:
+                                pickle.dump(pca, pickle_file)
+                            del pickle_file
+        
+                    print("Comulative Explained variance ratio: ", sum(pca.explained_variance_ratio_))
+                    print("Number of components: ", pca.n_components_)
+                    
+                    print('## Extracting features from training, validation and test data...')
+                    features_train = extract_and_pca_features(feature_extractor, train_imgs_dataloader, pca, n_stacked_batches, device)
+                    features_val = extract_and_pca_features(feature_extractor, val_imgs_dataloader, pca, n_stacked_batches, device)
+                    features_test = extract_and_pca_features(feature_extractor, test_imgs_dataloader, pca, n_stacked_batches, device)
+                    
+                    # print("\n")
+                    # print('## Checking and Freeing  GPU memory...')
+                    # memory_checker()
+                    model.to('cpu') # sposto sulla ram
+                    try:
+                        feature_extractor.to('cpu') # sposto sulla ram
+                    except:
+                        pass
+                    del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                    torch.cuda.empty_cache() # elimino la chache vram
+                    gc.collect() # elimino la cache ram
+                    # memory_checker()
+                else:
+                    print('## Extracting features from training, validation and test data...')
+                    features_train = extract_features_no_pca(feature_extractor, train_imgs_dataloader, device)
+                    features_val = extract_features_no_pca(feature_extractor, val_imgs_dataloader, device)
+                    features_test = extract_features_no_pca(feature_extractor, test_imgs_dataloader, device)
+                    
+                    model.to('cpu') # sposto sulla ram
+                    try:
+                        feature_extractor.to('cpu') # sposto sulla ram
+                    except:
+                        pass
+                    del model, feature_extractor, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                    torch.cuda.empty_cache() # elimino la chache vram
+                    gc.collect() # elimino la cache ram
 
                 ## Fit the linear model ##
                 print('\n ## Fit Encoder and Predict...')
