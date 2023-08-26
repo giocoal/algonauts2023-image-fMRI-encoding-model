@@ -18,7 +18,7 @@ from torchvision import models
 from src.cuda_checker import cuda_torch_check, memory_checker
 
 ### My modules import
-from src.data_loader import argObj, data_loaders_stimuli_fmri, transform_layers, transform_layers_test, load_roi_masks_challenge_from_list_of_ROI
+from src.data_loader import argObj, data_loaders_stimuli_fmri, transform_layers, transform_layers_test, load_roi_masks_challenge_from_list_of_ROI, from_config_dict_to_submission_name, save_json_file
 from src import image_preprocessing
 from src.feature_extraction import model_loader, fit_pca, pca_batch_calculator, extract_and_pca_features, extract_features_no_pca
 from src.encoding import linear_regression, ridge_alpha_grid_search
@@ -213,7 +213,7 @@ if __name__ == "__main__":
                               'vgg19_bn': ['avgpool', 'features.51', 'features.45', 'features.42']} 
         
         ## testing parameters
-        test_the_layers = True #@param ["True", "False"] 
+        test_the_layers = False #@param ["True", "False"] 
         test_a_config = False
         skip_inference_while_testing = True
         
@@ -235,7 +235,7 @@ if __name__ == "__main__":
             test_models_layers = json_config_to_feature_extraction_dict_5(final_extraction_config)
             
         ## Define the subject to test/inference  on
-        start_subj = 2
+        start_subj = 1
         end_subj = 8
 
         ## config INFERENCE parameters 
@@ -298,7 +298,7 @@ if __name__ == "__main__":
         os.makedirs(parent_submission_dir)
     # if not os.path.isdir(parent_config_dir) and save and test_the_layers:
     #     os.makedirs(parent_config_dir)
-    print(submission_name + "\n")
+    if test_the_layers: print(submission_name + "\n")
     
     # define the dictionary to store the correlation values
     noise_norm_corr_dict = {}
@@ -592,14 +592,12 @@ if __name__ == "__main__":
             noise_norm_corr_dict = {}
             noise_norm_corr_ROI_dict = {} 
         
-        if skip_inference_while_testing:
+        if test_the_layers and skip_inference_while_testing:
             continue
         print(f'######## Starting the {color.RED} ENCODING PROCEDURE {color.END} ######## \n')
         # importing the correct config file that will define all the model-layers used
         extraction_config_file = config_dict[str(subj)]['extraction_config_file']
         config_subj = config_dict[str(subj)]['config_subj']
-        with open(full_path, 'w') as file:
-            json.dump(final_dict, file, indent=4)
         extraction_config_folder = f'config_subj{config_subj}'
         parent_config_dir = f'./files/{extraction_config_folder}/{config_name}'
         global_config_dir = f'./files/{extraction_config_folder}/global'
@@ -640,15 +638,14 @@ if __name__ == "__main__":
             for model, layers in final_models_layers.items()
         ])
         # datetime_id = strftime("(%Y-%m-%d_%H-%M)")
-        submission_name = f'{datetime_id}-{model_layer_full}-PCA_{pca_component}-{regression_type.upper()}' #-ALPHA_{"{:.1e}".format(alpha_l)}'
+        # submission_name = f'{datetime_id}-{model_layer_full}-PCA_{pca_component}-{regression_type.upper()}' #-ALPHA_{"{:.1e}".format(alpha_l)}'
+        submission_name = from_config_dict_to_submission_name(config_dict, datetime_id)
         # create the submission name using the config file used
         parent_submission_dir = f'./files/submissions/{submission_name}'
         if not os.path.isdir(parent_submission_dir) and save:
             os.makedirs(parent_submission_dir)
         # save config files used if not already saved
-        if os.path.exists(os.path.join(parent_submission_dir, 'config_used.json')):
-            with open(os.path.join(parent_submission_dir, 'config_used.json'), 'w') as file:
-                json.dump(config_dict, file, indent=4)
+        save_json_file(parent_submission_dir, config_dict)
         print(submission_name + "\n")
         
         # Dataframe to save the results of the validation on every subjects
