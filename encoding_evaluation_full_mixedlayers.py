@@ -126,11 +126,12 @@ if __name__ == "__main__":
         batch_size = 64
         
         compute_pca = True
-        pca_component = 2048
+        pca_component_total = pca_component = 2048
+        pca_component_single_layer = 512
         min_pca_batch_size = pca_component + 300 # pca_component * 2
         # 'pca_mode' is the parameter used to define if the PCA will be computed on the concatenated 
         # features 'concat_pca' or on the single ones and then concatenated 'pca_concat'
-        pca_mode = 'concat_pca' #@param ['concat_pca', 'pca_concat'] {allow-input: true}
+        pca_mode = 'pca_concat' #@param ['concat_pca', 'pca_concat'] {allow-input: true}
         
         def pca_selector(model_and_layer):
             no_pca_model = ['DINOv2s','DINOv2b','DINOv2l','DINOv2g']
@@ -199,25 +200,48 @@ if __name__ == "__main__":
                 print('No preprocessing selected, using imagenet_transform_alt')
                 return image_preprocessing.imagenet_transform_alt, 'imagenet_transform_alt'
         
-        test_models_layers = {#'ViT_GPT2': [['decoder.9', 'decoder.10', 'decoder.11', 'decoder.12']],
-                              'alexnet': ['features.10', 'features.11', 'features.12'],
-                              'DINOv2s': [['0', '1', '2'],'2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
-                              'DINOv2b': ['2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
-                              'DINOv2l': ['2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['11','12','13'], ['13','14','15'], ['11','12','13','14','15'], ['15','16','17'], ['17','18','19'], ['15','16','17','18','19'], ['19','20','21'], ['22','23'], ['19','20','21','22','23']],
-                              'dino_res50': ['layer1.0.relu', 'layer1.1.relu', 'layer1.2.relu', 'layer2.1.relu', 'layer2.2.relu', 'layer2.3.relu', 'layer3.0.relu', 'layer3.1.relu', 'layer3.2.relu', 'layer3.3.relu', 'layer3.4.relu', 'layer3.5.relu', 'layer4.0.relu', 'layer4.1.relu', 'layer4.2.relu', 'avgpool'],
-                              'alexnet': [['features.10', 'features.11', 'features.12'], 'features.1', 'features.4', 'features.7', 'features.9', 'features.11', 'features.12'],
-                              'ZFNet': ['features.stage1.unit1.pool1', 'features.stage2.unit1.activ', 'features.stage3.unit3.activ', 'features.stage3.pool3', 'features.stage3.unit1.activ', 'features.stage3.unit2.activ'],
-                              'RetinaNet': ['fpn', 'body.layer4.2.relu_2', 'body.layer4.2.relu_1', 'body.layer4.2.relu','body.layer3.5.relu_1', 'body.layer3.5.relu_2','body.layer3.0.relu_2', 'body.layer3.1.relu'],
-                              'resnet50': ['layer1.0.relu', 'layer1.1.relu', 'layer1.2.relu', 'layer2.1.relu', 'layer2.2.relu', 'layer2.3.relu', 'layer3.0.relu', 'layer3.1.relu', 'layer3.2.relu', 'layer3.3.relu', 'layer3.4.relu', 'layer3.5.relu', 'layer4.0.relu', 'layer4.1.relu', 'layer4.2.relu', 'avgpool'], # 'layer2.0.relu',
-                              'efficientnetb2': ['avgpool', 'flatten', 'features.8', 'features.7.0.block.3', 'features.6.4.block.3', 'features.3.0.block.2', 'features.3.2.block.3', 'features.4.1.block.3','features.5.1.block.2'],
-                              'vgg16': ['avgpool'],
-                              'vgg19': ['avgpool', 'features.33', 'features.35'],
-                               # 'vgg16_bn': [ 'features.36','features.39','features.42','avgpool'],
-                              'vgg19_bn': ['avgpool', 'features.51', 'features.45', 'features.42']} 
+        # test_models_layers = {'ViT_GPT2': [['decoder.9', 'decoder.10', 'decoder.11', 'decoder.12']],
+        #                       'alexnet': ['features.10', 'features.11', 'features.12'],
+        #                       'DINOv2s': [['0', '1', '2'],'2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
+        #                       'DINOv2b': ['2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['10','11']],
+        #                       'DINOv2l': ['2','DINOv2', '0', '1','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23',['0', '1', '2'],['2', '3', '4'],['4', '5', '6'],['0', '1', '2', '3'],['0', '1', '2','3','4','5'], ['3','4','5'],['5', '6', '7','8','9'],['7', '8', '9','10','11'], ['9','10','11'], ['11','12','13'], ['13','14','15'], ['11','12','13','14','15'], ['15','16','17'], ['17','18','19'], ['15','16','17','18','19'], ['19','20','21'], ['22','23'], ['19','20','21','22','23']],
+        #                       'dino_res50': ['layer1.0.relu', 'layer1.1.relu', 'layer1.2.relu', 'layer2.1.relu', 'layer2.2.relu', 'layer2.3.relu', 'layer3.0.relu', 'layer3.1.relu', 'layer3.2.relu', 'layer3.3.relu', 'layer3.4.relu', 'layer3.5.relu', 'layer4.0.relu', 'layer4.1.relu', 'layer4.2.relu', 'avgpool'],
+        #                       'alexnet': [['features.10', 'features.11', 'features.12'], 'features.1', 'features.4', 'features.7', 'features.9', 'features.11', 'features.12'],
+        #                       'ZFNet': ['features.stage1.unit1.pool1', 'features.stage2.unit1.activ', 'features.stage3.unit3.activ', 'features.stage3.pool3', 'features.stage3.unit1.activ', 'features.stage3.unit2.activ'],
+        #                       'RetinaNet': ['fpn', 'body.layer4.2.relu_2', 'body.layer4.2.relu_1', 'body.layer4.2.relu','body.layer3.5.relu_1', 'body.layer3.5.relu_2','body.layer3.0.relu_2', 'body.layer3.1.relu'],
+        #                       'resnet50': ['layer1.0.relu', 'layer1.1.relu', 'layer1.2.relu', 'layer2.1.relu', 'layer2.2.relu', 'layer2.3.relu', 'layer3.0.relu', 'layer3.1.relu', 'layer3.2.relu', 'layer3.3.relu', 'layer3.4.relu', 'layer3.5.relu', 'layer4.0.relu', 'layer4.1.relu', 'layer4.2.relu', 'avgpool'], # 'layer2.0.relu',
+        #                       'efficientnetb2': ['avgpool', 'flatten', 'features.8', 'features.7.0.block.3', 'features.6.4.block.3', 'features.3.0.block.2', 'features.3.2.block.3', 'features.4.1.block.3','features.5.1.block.2'],
+        #                       'vgg16': ['avgpool'],
+        #                       'vgg19': ['avgpool', 'features.33', 'features.35'],
+        #                        'vgg16_bn': [ 'features.36','features.39','features.42','avgpool'],
+        #                       'vgg19_bn': ['avgpool', 'features.51', 'features.45', 'features.42']} 
+        
+        test_models_layers = {'alexnet': [['features.10', 'features.11', 'features.12']],
+                            'ViT_GPT2': ['encoder.5','encoder.6', 'encoder.7', 'encoder.8','encoder.9', 'encoder.10', 'encoder.11', 'encoder.12',
+                                         ['encoder.6', 'encoder.6', 'encoder.8', 'encoder.9'], 
+                                         ['encoder.9', 'encoder.10', 'encoder.11', 'encoder.12'],
+                                         'decoder.5', 'decoder.6', 'decoder.7', 'decoder.8',
+                                         'decoder.9', 'decoder.10', 'decoder.11', 'decoder.12',
+                                         ['decoder.9', 'decoder.10', 'decoder.11', 'decoder.12'],
+                                         ['encoder.9', 'encoder.10', 'encoder.11', 'encoder.12', 'decoder.9', 'decoder.10', 'decoder.11', 'decoder.12'],
+                                         ['encoder.9', 'decoder.9'],['encoder.11', 'decoder.11','encoder.12', 'decoder.12']],
+                            'DINOv2l': [['15', '16', '17', '18', '19'], ['19', '20', '21'], ['22', '23'], 
+                                        ['19', '20', '21', '22', '23']],
+                            'dino_res50': [['layer1.0.relu', 'layer1.1.relu', 'layer1.2.relu'], 
+                                           ['layer2.0.relu' ,'layer2.1.relu', 'layer2.2.relu', 'layer2.3.relu'], 
+                                           ['layer3.0.relu', 'layer3.1.relu', 'layer3.2.relu', 'layer3.3.relu', 'layer3.4.relu', 'layer3.5.relu'], 
+                                           ['layer4.0.relu', 'layer4.1.relu', 'layer4.2.relu', 'avgpool'],
+                                           ['layer1.2.relu', 'layer2.3.relu', 'layer3.5.relu', 'layer4.2.relu', 'avgpool']],
+                            'RetinaNet': [['body.layer1.0.relu_2', 'body.layer1.1.relu_2', 'body.layer1.2.relu_2'], 
+                                          ['body.layer2.0.relu_2', 'body.layer2.1.relu_2', 'body.layer2.2.relu_2', 'body.layer2.3.relu_2'],
+                                          ['body.layer3.0.relu_2', 'body.layer3.1.relu_2', 'body.layer3.2.relu_2', 'body.layer3.3.relu_2', 'body.layer3.4.relu_2', 'body.layer3.5.relu_2'],
+                                          ['body.layer4.0.relu_2', 'body.layer4.1.relu_2', 'body.layer4.2.relu_2'],
+                                          ['body.layer4.0.relu_2', 'body.layer4.1.relu_2', 'body.layer4.2.relu_2', 'fpn'],
+                                          ['body.layer1.2.relu_2', 'body.layer2.3.relu_2', 'body.layer3.5.relu_2', 'body.layer4.2.relu_2', 'fpn']]}
         
         ## testing parameters
         test_the_layers = True #@param ["True", "False"] 
-        test_a_config = True
+        test_a_config = False
         skip_inference_while_testing = True
         
         # retest all the layers even if they have been tested before
@@ -351,7 +375,12 @@ if __name__ == "__main__":
                     else:
                         transform, transform_string = test_preprocessing_selector(feature_model_type)
                         compute_pca = pca_selector([feature_model_type, model_layer])
-                    print(f'\n######## Testing Model: {color.BOLD + feature_model_type + color.END} Layer(s): {color.BOLD + str(model_layer) + color.END}  - Transform: {color.BOLD + str(transform_string) + color.END} - PCA: {color.BOLD + str(compute_pca) + "(" + str(pca_component) + ")" + color.END} - Regression Type: {color.BOLD + str(regression_type) + color.END} {counter_layers_to_test}/{totale_layers_to_test} ######## \n')
+                    # if 'concat_pca' is selected or if only one layer is selected, the pca_component will be 2048
+                    if pca_mode == 'concat_pca' or (not isinstance(model_layer, list)) or (isinstance(model_layer, list) and len(model_layer) == 1):
+                        pca_component = pca_component_total
+                    else:
+                        pca_component = pca_component_single_layer
+                    print(f'\n######## Testing Model: {color.BOLD + feature_model_type + color.END} Layer(s): {color.BOLD + str(model_layer) + color.END}  - Transform: {color.BOLD + str(transform_string) + color.END} - PCA: {color.BOLD + str(compute_pca) + " (pca mode: " + str(pca_mode) + " n" + str(pca_component) + ")" + color.END} - Regression Type: {color.BOLD + str(regression_type) + color.END} {counter_layers_to_test}/{totale_layers_to_test} ######## \n')
                     # first of all i verify that the couple model+layer has never been tested before
                     # in positive case i will use the old score and do not re-test the specific layer (minimum variation in accuracy is exected)
                     # Definining paths to data and submission directories ##
@@ -394,87 +423,185 @@ if __name__ == "__main__":
                     
                     
                     
-                    #start_time_feature_extraction = time.time()
                     
-                    # Load the downsampled features if they exist, otherwise extract them
-                    train_features_file_name, val_features_file_name, test_features_file_name = file_name_generator.get_features_file_name(subj)
-                    train_features_file_path, val_features_file_path, test_features_file_path = os.path.join(features_dir, f'{train_features_file_path}.npy'), os.path.join(features_dir, f'{val_features_file_path}.npy'), os.path.join(features_dir, f'{test_features_file_path}.npy')
-                    if os.path.exists(train_features_file_path) and os.path.exists(val_features_file_path) and os.path.exists(test_features_file_path) and load_save_downsampled_feature:
-                        print(f"\n {color.BLUE} Loading downsampled features from: {train_features_file_path} {color.END} \n")
-                        features_train = np.load(train_features_file_path)
-                        features_val = np.load(val_features_file_path)
-                        features_test = np.load(test_features_file_path)
-                    else:
-                        print(f"{color.BLUE} Downsampled features not found, extracting them... {color.END}")
-                        try:
-                            model, feature_extractor = model_loader(feature_model_type, model_layer, device)
-                        except ValueError:
-                            print(f'{color.RED} Model not found! {color.END}')
-                            continue 
-                        if compute_pca:
-                            # Fit the PCA model
-                            pca_batch_size, n_stacked_batches = pca_batch_calculator(len(idxs_train),
-                                                                                    batch_size,
-                                                                                    min_pca_batch_size,
-                                                                                    pca_component)
-                            # Load pca model if it exists, otherwise fit it
-                            pca_file_name = file_name_generator.get_pca_file_name()
-                            pca_path = os.path.join(pca_dir, f'{pca_file_name}.pkl')
-                            if os.path.exists(pca_path) and load_save_pca:
-                                print(f"\n Loading PCA model from: {pca_path}\n")
-                                with open(pca_path, 'rb') as pickle_file:
-                                    pca = pickle.load(pickle_file)
-                                del pickle_file
-                            else:
-                                print(f"\n PCA Model not found or load_save_pca = False, fitting ...\n")
-                                pca = fit_pca(feature_extractor,
-                                                train_imgs_dataloader,
-                                                pca_component,
-                                                n_stacked_batches,
-                                                pca_batch_size,
-                                                device)
-                                if load_save_pca:
-                                    with open(pca_path, 'wb') as pickle_file:
-                                        pickle.dump(pca, pickle_file)
-                                    del pickle_file
-                            print("Comulative Explained variance ratio: ", sum(pca.explained_variance_ratio_))
-                            print("Number of components: ", pca.n_components_)
-                            
-                            print('## Extracting features from training, validation and test data...')
-                            features_train = extract_and_pca_features(feature_extractor, train_imgs_dataloader, pca, n_stacked_batches, device)
-                            features_val = extract_and_pca_features(feature_extractor, val_imgs_dataloader, pca, n_stacked_batches, device)
-                            features_test = extract_and_pca_features(feature_extractor, test_imgs_dataloader, pca, n_stacked_batches, device)
-                            
-                            # print("\n")
-                            # print('## Checking and Freeing  GPU memory...')
-                            # memory_checker()
-                            model.to('cpu') # sposto sulla ram
-                            try:
-                                feature_extractor.to('cpu') # sposto sulla ram
-                            except:
-                                pass
-                            del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
-                            torch.cuda.empty_cache() # elimino la chache vram
-                            gc.collect() # elimino la cache ram
-                            # memory_checker()
+                    # if multiple layers are selected, pca_mode will be used to define if the PCA will 
+                    # be computed on the concatenated features 'concat_pca' (or if a single layer is passed) 
+                    # or on the single ones and then concatenated 'pca_concat'
+                    if (pca_mode == 'concat_pca') or (not isinstance(model_layer, list)) or (isinstance(model_layer, list) and len(model_layer) == 1):
+                        # Load the downsampled features if they exist, otherwise extract them
+                        train_features_file_name, val_features_file_name, test_features_file_name = file_name_generator.get_features_file_name(subj)
+                        train_features_file_path, val_features_file_path, test_features_file_path = os.path.join(features_dir, f'{train_features_file_name}.npy'), os.path.join(features_dir, f'{val_features_file_name}.npy'), os.path.join(features_dir, f'{test_features_file_name}.npy')
+                        if os.path.exists(train_features_file_path) and os.path.exists(val_features_file_path) and os.path.exists(test_features_file_path) and load_save_downsampled_feature:
+                            print(f"\n {color.BLUE} Loading downsampled features from: {train_features_file_path} {color.END} \n")
+                            features_train = np.load(train_features_file_path)
+                            features_val = np.load(val_features_file_path)
+                            features_test = np.load(test_features_file_path)
                         else:
-                            print('## Extracting features from training, validation and test data...')
-                            features_train = extract_features_no_pca(feature_extractor, train_imgs_dataloader, device)
-                            features_val = extract_features_no_pca(feature_extractor, val_imgs_dataloader, device)
-                            features_test = extract_features_no_pca(feature_extractor, test_imgs_dataloader, device)
-                            
-                            model.to('cpu') # sposto sulla ram
+                            print(f"{color.BLUE} Downsampled features not found, extracting them... {color.END}")
                             try:
-                                feature_extractor.to('cpu') # sposto sulla ram
-                            except:
-                                pass
-                            del model, feature_extractor, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
-                            torch.cuda.empty_cache() # elimino la chache vram
-                            gc.collect() # elimino la cache ram
-                        if load_save_downsampled_feature:
-                            np.save(train_features_file_path, features_train)
-                            np.save(val_features_file_path, features_val)
-                            np.save(test_features_file_path, features_test)
+                                model, feature_extractor = model_loader(feature_model_type, model_layer, device)
+                            except ValueError:
+                                print(f'{color.RED} Model not found! {color.END}')
+                                continue 
+                            if compute_pca:
+                                # Fit the PCA model
+                                pca_batch_size, n_stacked_batches = pca_batch_calculator(len(idxs_train),
+                                                                                        batch_size,
+                                                                                        min_pca_batch_size,
+                                                                                        pca_component)
+                                # Load pca model if it exists, otherwise fit it
+                                pca_file_name = file_name_generator.get_pca_file_name()
+                                pca_path = os.path.join(pca_dir, f'{pca_file_name}.pkl')
+                                if os.path.exists(pca_path) and load_save_pca:
+                                    print(f"\n Loading PCA model from: {pca_path}\n")
+                                    with open(pca_path, 'rb') as pickle_file:
+                                        pca = pickle.load(pickle_file)
+                                    del pickle_file
+                                else:
+                                    print(f"\n PCA Model not found or load_save_pca = False, fitting ...\n")
+                                    pca = fit_pca(feature_extractor,
+                                                    train_imgs_dataloader,
+                                                    pca_component,
+                                                    n_stacked_batches,
+                                                    pca_batch_size,
+                                                    device)
+                                    if load_save_pca:
+                                        with open(pca_path, 'wb') as pickle_file:
+                                            pickle.dump(pca, pickle_file)
+                                        del pickle_file
+                                print("Comulative Explained variance ratio: ", sum(pca.explained_variance_ratio_))
+                                print("Number of components: ", pca.n_components_)
+                                
+                                print('## Extracting features from training, validation and test data...')
+                                features_train = extract_and_pca_features(feature_extractor, train_imgs_dataloader, pca, n_stacked_batches, device)
+                                features_val = extract_and_pca_features(feature_extractor, val_imgs_dataloader, pca, n_stacked_batches, device)
+                                features_test = extract_and_pca_features(feature_extractor, test_imgs_dataloader, pca, n_stacked_batches, device)
+                                
+                                # print("\n")
+                                # print('## Checking and Freeing  GPU memory...')
+                                # memory_checker()
+                                model.to('cpu') # sposto sulla ram
+                                try:
+                                    feature_extractor.to('cpu') # sposto sulla ram
+                                except:
+                                    pass
+                                del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                                torch.cuda.empty_cache() # elimino la chache vram
+                                gc.collect() # elimino la cache ram
+                                # memory_checker()
+                            else:
+                                print('## Extracting features from training, validation and test data...')
+                                features_train = extract_features_no_pca(feature_extractor, train_imgs_dataloader, device)
+                                features_val = extract_features_no_pca(feature_extractor, val_imgs_dataloader, device)
+                                features_test = extract_features_no_pca(feature_extractor, test_imgs_dataloader, device)
+                                
+                                model.to('cpu') # sposto sulla ram
+                                try:
+                                    feature_extractor.to('cpu') # sposto sulla ram
+                                except:
+                                    pass
+                                del model, feature_extractor, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                                torch.cuda.empty_cache() # elimino la chache vram
+                                gc.collect() # elimino la cache ram
+                            if load_save_downsampled_feature:
+                                np.save(train_features_file_path, features_train)
+                                np.save(val_features_file_path, features_val)
+                                np.save(test_features_file_path, features_test)
+                    elif pca_mode == 'pca_concat':
+                        # create empty lists to store the features and hstack them at the end
+                        features_train_list = []
+                        features_val_list = []
+                        features_test_list = []
+                        for single_layer_index, single_model_layer in enumerate(model_layer):
+                            print("Extracting features from layer: ", single_model_layer, " - ", single_layer_index+1, "/", len(model_layer))
+                            file_name_generator = FileNameGenerator(feature_model_type, single_model_layer, transform_string, regression_type, pca_component, compute_pca, pca_mode)
+                            # Load the downsampled features if they exist, otherwise extract them
+                            train_features_file_name, val_features_file_name, test_features_file_name = file_name_generator.get_features_file_name(subj)
+                            train_features_file_path, val_features_file_path, test_features_file_path = os.path.join(features_dir, f'{train_features_file_name}.npy'), os.path.join(features_dir, f'{val_features_file_name}.npy'), os.path.join(features_dir, f'{test_features_file_name}.npy')
+                            if os.path.exists(train_features_file_path) and os.path.exists(val_features_file_path) and os.path.exists(test_features_file_path) and load_save_downsampled_feature:
+                                print(f"\n {color.BLUE} Loading downsampled features from: {train_features_file_path} {color.END} \n")
+                                features_train_list.append(np.load(train_features_file_path))
+                                features_val_list.append(np.load(val_features_file_path))
+                                features_test_list.append(np.load(test_features_file_path))
+                            else:
+                                print(f"{color.BLUE} Downsampled features not found, extracting them... {color.END}")
+                                try:
+                                    model, feature_extractor = model_loader(feature_model_type, single_model_layer, device)
+                                except ValueError:
+                                    print(f'{color.RED} Model not found! {color.END}')
+                                    continue 
+                                if compute_pca:
+                                    # Fit the PCA model
+                                    pca_batch_size, n_stacked_batches = pca_batch_calculator(len(idxs_train),
+                                                                                            batch_size,
+                                                                                            min_pca_batch_size,
+                                                                                            pca_component)
+                                    # Load pca model if it exists, otherwise fit it
+                                    pca_file_name = file_name_generator.get_pca_file_name()
+                                    pca_path = os.path.join(pca_dir, f'{pca_file_name}.pkl')
+                                    if os.path.exists(pca_path) and load_save_pca:
+                                        print(f"\n Loading PCA model from: {pca_path}\n")
+                                        with open(pca_path, 'rb') as pickle_file:
+                                            pca = pickle.load(pickle_file)
+                                        del pickle_file
+                                    else:
+                                        print(f"\n PCA Model not found or load_save_pca = False, fitting ...\n")
+                                        pca = fit_pca(feature_extractor,
+                                                        train_imgs_dataloader,
+                                                        pca_component,
+                                                        n_stacked_batches,
+                                                        pca_batch_size,
+                                                        device)
+                                        if load_save_pca:
+                                            with open(pca_path, 'wb') as pickle_file:
+                                                pickle.dump(pca, pickle_file)
+                                            del pickle_file
+                                    print("Comulative Explained variance ratio: ", sum(pca.explained_variance_ratio_))
+                                    print("Number of components: ", pca.n_components_)
+                                    
+                                    print('## Extracting features from training, validation and test data...')
+                                    features_train_list.append(extract_and_pca_features(feature_extractor, train_imgs_dataloader, pca, n_stacked_batches, device))
+                                    features_val_list.append(extract_and_pca_features(feature_extractor, val_imgs_dataloader, pca, n_stacked_batches, device))
+                                    features_test_list.append(extract_and_pca_features(feature_extractor, test_imgs_dataloader, pca, n_stacked_batches, device))
+                                    
+                                    # print("\n")
+                                    # print('## Checking and Freeing  GPU memory...')
+                                    # memory_checker()
+                                    model.to('cpu') # sposto sulla ram
+                                    try:
+                                        feature_extractor.to('cpu') # sposto sulla ram
+                                    except:
+                                        pass
+                                    # del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                                    # torch.cuda.empty_cache() # elimino la chache vram
+                                    # gc.collect() # elimino la cache ram
+                                    # memory_checker()
+                                else:
+                                    print('## Extracting features from training, validation and test data...')
+                                    features_train_list.append(extract_features_no_pca(feature_extractor, train_imgs_dataloader, device))
+                                    features_val_list.append(extract_features_no_pca(feature_extractor, val_imgs_dataloader, device))
+                                    features_test_list.append(extract_features_no_pca(feature_extractor, test_imgs_dataloader, device))
+                                    
+                                    model.to('cpu') # sposto sulla ram
+                                    try:
+                                        feature_extractor.to('cpu') # sposto sulla ram
+                                    except:
+                                        pass
+                                    # del model, feature_extractor, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                                    # torch.cuda.empty_cache() # elimino la chache vram
+                                    # gc.collect() # elimino la cache ram
+                                if load_save_downsampled_feature:
+                                    np.save(train_features_file_path, features_train_list[single_layer_index])
+                                    np.save(val_features_file_path, features_val_list[single_layer_index])
+                                    np.save(test_features_file_path, features_test_list[single_layer_index])
+                            # hstack the features
+                            features_train = np.hstack(features_train_list)
+                            features_val = np.hstack(features_val_list)
+                            features_test = np.hstack(features_test_list)
+                        del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                        del features_train_list, features_val_list, features_test_list
+                        torch.cuda.empty_cache() # elimino la chache vram
+                        gc.collect() # elimino la cache ram
 
                     ## Fit the linear model ##
                     print('\n ## Fit Encoder and Predict...')
@@ -694,7 +821,12 @@ if __name__ == "__main__":
                 pca_mode = model_layer[4]
                 compute_pca = False if pca_component == 9999999 else True
                 model_layer = model_layer[0]
-                print(f'######## Computing Model: {color.BOLD + feature_model_type + color.END} Layer(s): {color.BOLD + str(model_layer) + color.END} - Transform: {color.BOLD + str(transform_string) + color.END} - PCA: {color.BOLD + str(compute_pca) + "(" + str(pca_component) + ")" + color.END} - Regression Type: {color.BOLD + str(regression_type) + color.END} {counter_layers_to_test}/{totale_layers_to_test} ######## \n')
+                # if multiple layers and pca_mode == 'concat_pca' then the pca_component will be 512 for every layer 
+                # if isinstance(model_layer, list) and pca_mode == 'concat_pca':
+                #     pca_component = pca_component_single_layer
+                # else:
+                #     pca_component = int(model_layer[3])
+                print(f'######## Computing Model: {color.BOLD + feature_model_type + color.END} Layer(s): {color.BOLD + str(model_layer) + color.END} - Transform: {color.BOLD + str(transform_string) + color.END} - PCA: {color.BOLD + str(compute_pca) + " (pca mode: " + str(pca_mode) + " n" + str(pca_component) + ")" + color.END} - Regression Type: {color.BOLD + str(regression_type) + color.END} {counter_layers_to_test}/{totale_layers_to_test} ######## \n')
                 # transform, transform_string = test_preprocessing_selector(feature_model_type)
                 file_name_generator = FileNameGenerator(feature_model_type, model_layer, transform_string, regression_type, pca_component, compute_pca, pca_mode)
                 model_layer_id = file_name_generator.get_model_layer_id()
@@ -714,88 +846,187 @@ if __name__ == "__main__":
                                                         rh_fmri_path = args.rh_fmri)
                 
                 train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader = data_loaders.images_dataloader(batch_size, transform)
-                
-                # Load the downsampled features if they exist, otherwise extract them
-                train_features_file_name, val_features_file_name, test_features_file_name = file_name_generator.get_features_file_name(subj)
-                train_features_file_path, val_features_file_path, test_features_file_path = os.path.join(features_dir, f'{train_features_file_name}.npy'), os.path.join(features_dir, f'{val_features_file_name}.npy'), os.path.join(features_dir, f'{test_features_file_name}.npy')
-                if os.path.exists(train_features_file_path) and os.path.exists(val_features_file_path) and os.path.exists(test_features_file_path) and load_save_downsampled_feature:
-                    print(f"\n {color.BLUE} Loading downsampled features from: {train_features_file_path} {color.END} \n")
-                    features_train = np.load(train_features_file_path)
-                    features_val = np.load(val_features_file_path)
-                    features_test = np.load(test_features_file_path)
-                else:
-                    print(f" {color.BLUE} Downsampled features not found, extracting them... {color.END} ")
-                    try:
-                        model, feature_extractor = model_loader(feature_model_type, model_layer, device)
-                    except ValueError:
-                        print(f'{color.RED} Model not found! {color.END}')
-                        continue 
-                    #compute_pca = pca_selector([feature_model_type, model_layer])
-                    if compute_pca:
-                        # Fit the PCA model
-                        pca_batch_size, n_stacked_batches = pca_batch_calculator(len(idxs_train),
-                                                                                batch_size,
-                                                                                min_pca_batch_size,
-                                                                                pca_component)
-                        pca_file_name = file_name_generator.get_pca_file_name()
-                        pca_path = os.path.join(pca_dir, f'{pca_file_name}.pkl')
-                        if os.path.exists(pca_path) and load_save_pca:
-                            print(f"\n Loading PCA model from: {pca_path}\n")
-                            with open(pca_path, 'rb') as pickle_file:
-                                pca = pickle.load(pickle_file)
-                            del pickle_file
-                        else:
-                            print(f"\n PCA model not found or load_save_pca = False, fitting ...\n")
-                            pca = fit_pca(feature_extractor,
-                                            train_imgs_dataloader,
-                                            pca_component,
-                                            n_stacked_batches,
-                                            pca_batch_size,
-                                            device)
-                            if load_save_pca:
-                                with open(pca_path, 'wb') as pickle_file:
-                                    pickle.dump(pca, pickle_file)
-                                del pickle_file
-            
-                        print("Comulative Explained variance ratio: ", sum(pca.explained_variance_ratio_))
-                        print("Number of components: ", pca.n_components_)
-                        
-                        print('## Extracting features from training, validation and test data...')
-                        features_train = extract_and_pca_features(feature_extractor, train_imgs_dataloader, pca, n_stacked_batches, device)
-                        features_val = extract_and_pca_features(feature_extractor, val_imgs_dataloader, pca, n_stacked_batches, device)
-                        features_test = extract_and_pca_features(feature_extractor, test_imgs_dataloader, pca, n_stacked_batches, device)
-                        
-                        # print("\n")
-                        # print('## Checking and Freeing  GPU memory...')
-                        # memory_checker()
-                        model.to('cpu') # sposto sulla ram
-                        try:
-                            feature_extractor.to('cpu') # sposto sulla ram
-                        except:
-                            pass
-                        del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
-                        torch.cuda.empty_cache() # elimino la chache vram
-                        gc.collect() # elimino la cache ram
-                        # memory_checker()
+                # if multiple layers are selected, pca_mode will be used to define if the PCA will 
+                # be computed on the concatenated features 'concat_pca' (or if a single layer is passed) 
+                # or on the single ones and then concatenated 'pca_concat'
+                if (pca_mode == 'concat_pca') or (not isinstance(model_layer, list)) or (isinstance(model_layer, list) and len(model_layer) == 1):
+                    # Load the downsampled features if they exist, otherwise extract them
+                    train_features_file_name, val_features_file_name, test_features_file_name = file_name_generator.get_features_file_name(subj)
+                    train_features_file_path, val_features_file_path, test_features_file_path = os.path.join(features_dir, f'{train_features_file_name}.npy'), os.path.join(features_dir, f'{val_features_file_name}.npy'), os.path.join(features_dir, f'{test_features_file_name}.npy')
+                    if os.path.exists(train_features_file_path) and os.path.exists(val_features_file_path) and os.path.exists(test_features_file_path) and load_save_downsampled_feature:
+                        print(f"\n {color.BLUE} Loading downsampled features from: {train_features_file_path} {color.END} \n")
+                        features_train = np.load(train_features_file_path)
+                        features_val = np.load(val_features_file_path)
+                        features_test = np.load(test_features_file_path)
                     else:
-                        print('## Extracting features from training, validation and test data...')
-                        features_train = extract_features_no_pca(feature_extractor, train_imgs_dataloader, device)
-                        features_val = extract_features_no_pca(feature_extractor, val_imgs_dataloader, device)
-                        features_test = extract_features_no_pca(feature_extractor, test_imgs_dataloader, device)
-                        
-                        model.to('cpu') # sposto sulla ram
+                        print(f" {color.BLUE} Downsampled features not found, extracting them... {color.END} ")
                         try:
-                            feature_extractor.to('cpu') # sposto sulla ram
-                        except:
-                            pass
-                        del model, feature_extractor, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
-                        torch.cuda.empty_cache() # elimino la chache vram
-                        gc.collect() # elimino la cache ram
-                    if load_save_downsampled_feature:
-                        np.save(train_features_file_path, features_train)
-                        np.save(val_features_file_path, features_val)
-                        np.save(test_features_file_path, features_test)
-
+                            model, feature_extractor = model_loader(feature_model_type, model_layer, device)
+                        except ValueError:
+                            print(f'{color.RED} Model not found! {color.END}')
+                            continue 
+                        #compute_pca = pca_selector([feature_model_type, model_layer])
+                        if compute_pca:
+                            # Fit the PCA model
+                            pca_batch_size, n_stacked_batches = pca_batch_calculator(len(idxs_train),
+                                                                                    batch_size,
+                                                                                    min_pca_batch_size,
+                                                                                    pca_component)
+                            pca_file_name = file_name_generator.get_pca_file_name()
+                            pca_path = os.path.join(pca_dir, f'{pca_file_name}.pkl')
+                            if os.path.exists(pca_path) and load_save_pca:
+                                print(f"\n Loading PCA model from: {pca_path}\n")
+                                with open(pca_path, 'rb') as pickle_file:
+                                    pca = pickle.load(pickle_file)
+                                del pickle_file
+                            else:
+                                print(f"\n PCA model not found or load_save_pca = False, fitting ...\n")
+                                pca = fit_pca(feature_extractor,
+                                                train_imgs_dataloader,
+                                                pca_component,
+                                                n_stacked_batches,
+                                                pca_batch_size,
+                                                device)
+                                if load_save_pca:
+                                    with open(pca_path, 'wb') as pickle_file:
+                                        pickle.dump(pca, pickle_file)
+                                    del pickle_file
+                
+                            print("Comulative Explained variance ratio: ", sum(pca.explained_variance_ratio_))
+                            print("Number of components: ", pca.n_components_)
+                            
+                            print('## Extracting features from training, validation and test data...')
+                            features_train = extract_and_pca_features(feature_extractor, train_imgs_dataloader, pca, n_stacked_batches, device)
+                            features_val = extract_and_pca_features(feature_extractor, val_imgs_dataloader, pca, n_stacked_batches, device)
+                            features_test = extract_and_pca_features(feature_extractor, test_imgs_dataloader, pca, n_stacked_batches, device)
+                            
+                            # print("\n")
+                            # print('## Checking and Freeing  GPU memory...')
+                            # memory_checker()
+                            model.to('cpu') # sposto sulla ram
+                            try:
+                                feature_extractor.to('cpu') # sposto sulla ram
+                            except:
+                                pass
+                            del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                            torch.cuda.empty_cache() # elimino la chache vram
+                            gc.collect() # elimino la cache ram
+                            # memory_checker()
+                        else:
+                            print('## Extracting features from training, validation and test data...')
+                            features_train = extract_features_no_pca(feature_extractor, train_imgs_dataloader, device)
+                            features_val = extract_features_no_pca(feature_extractor, val_imgs_dataloader, device)
+                            features_test = extract_features_no_pca(feature_extractor, test_imgs_dataloader, device)
+                            
+                            model.to('cpu') # sposto sulla ram
+                            try:
+                                feature_extractor.to('cpu') # sposto sulla ram
+                            except:
+                                pass
+                            del model, feature_extractor, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                            torch.cuda.empty_cache() # elimino la chache vram
+                            gc.collect() # elimino la cache ram
+                        if load_save_downsampled_feature:
+                            np.save(train_features_file_path, features_train)
+                            np.save(val_features_file_path, features_val)
+                            np.save(test_features_file_path, features_test)
+                elif pca_mode == 'pca_concat':
+                    # create empty lists to store the features for each layer
+                    features_train_list = []
+                    features_val_list = []
+                    features_test_list = []
+                    for single_layer_index, single_model_layer in enumerate(model_layer):
+                        print("Extracting features from layer: ", single_model_layer, " - ", single_layer_index+1, "/", len(model_layer))
+                        file_name_generator = FileNameGenerator(feature_model_type, single_model_layer, transform_string, regression_type, pca_component, compute_pca, pca_mode)
+                        # Load the downsampled features if they exist, otherwise extract them
+                        train_features_file_name, val_features_file_name, test_features_file_name = file_name_generator.get_features_file_name(subj)
+                        train_features_file_path, val_features_file_path, test_features_file_path = os.path.join(features_dir, f'{train_features_file_name}.npy'), os.path.join(features_dir, f'{val_features_file_name}.npy'), os.path.join(features_dir, f'{test_features_file_name}.npy')
+                        if os.path.exists(train_features_file_path) and os.path.exists(val_features_file_path) and os.path.exists(test_features_file_path) and load_save_downsampled_feature:
+                            print(f"\n {color.BLUE} Loading downsampled features from: {train_features_file_path} {color.END} \n")
+                            features_train_list.append(np.load(train_features_file_path))
+                            features_val_list.append(np.load(val_features_file_path))
+                            features_test_list.append(np.load(test_features_file_path))
+                        else:
+                            print(f" {color.BLUE} Downsampled features not found, extracting them... {color.END} ")
+                            try:
+                                model, feature_extractor = model_loader(feature_model_type, single_model_layer, device)
+                            except ValueError:
+                                print(f'{color.RED} Model not found! {color.END}')
+                                continue 
+                            #compute_pca = pca_selector([feature_model_type, model_layer])
+                            if compute_pca:
+                                # Fit the PCA model
+                                pca_batch_size, n_stacked_batches = pca_batch_calculator(len(idxs_train),
+                                                                                        batch_size,
+                                                                                        min_pca_batch_size,
+                                                                                        pca_component)
+                                pca_file_name = file_name_generator.get_pca_file_name()
+                                pca_path = os.path.join(pca_dir, f'{pca_file_name}.pkl')
+                                if os.path.exists(pca_path) and load_save_pca:
+                                    print(f"\n Loading PCA model from: {pca_path}\n")
+                                    with open(pca_path, 'rb') as pickle_file:
+                                        pca = pickle.load(pickle_file)
+                                    del pickle_file
+                                else:
+                                    print(f"\n PCA model not found or load_save_pca = False, fitting ...\n")
+                                    pca = fit_pca(feature_extractor,
+                                                    train_imgs_dataloader,
+                                                    pca_component,
+                                                    n_stacked_batches,
+                                                    pca_batch_size,
+                                                    device)
+                                    if load_save_pca:
+                                        with open(pca_path, 'wb') as pickle_file:
+                                            pickle.dump(pca, pickle_file)
+                                        del pickle_file
+                    
+                                print("Comulative Explained variance ratio: ", sum(pca.explained_variance_ratio_))
+                                print("Number of components: ", pca.n_components_)
+                                
+                                print('## Extracting features from training, validation and test data...')
+                                features_train_list.append(extract_and_pca_features(feature_extractor, train_imgs_dataloader, pca, n_stacked_batches, device))
+                                features_val_list.append(extract_and_pca_features(feature_extractor, val_imgs_dataloader, pca, n_stacked_batches, device))
+                                features_test_list.append(extract_and_pca_features(feature_extractor, test_imgs_dataloader, pca, n_stacked_batches, device))
+                                
+                                # print("\n")
+                                # print('## Checking and Freeing  GPU memory...')
+                                # memory_checker()
+                                model.to('cpu') # sposto sulla ram
+                                try:
+                                    feature_extractor.to('cpu') # sposto sulla ram
+                                except:
+                                    pass
+                                # del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                                # torch.cuda.empty_cache() # elimino la chache vram
+                                # gc.collect() # elimino la cache ram
+                                # memory_checker()
+                            else:
+                                print('## Extracting features from training, validation and test data...')
+                                features_train_list.append(extract_features_no_pca(feature_extractor, train_imgs_dataloader, device))
+                                features_val_list.append(extract_features_no_pca(feature_extractor, val_imgs_dataloader, device))
+                                features_test_list.append(extract_features_no_pca(feature_extractor, test_imgs_dataloader, device))
+                                
+                                model.to('cpu') # sposto sulla ram
+                                try:
+                                    feature_extractor.to('cpu') # sposto sulla ram
+                                except:
+                                    pass
+                                # del model, feature_extractor, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                                # torch.cuda.empty_cache() # elimino la chache vram
+                                # gc.collect() # elimino la cache ram
+                            if load_save_downsampled_feature:
+                                np.save(train_features_file_path, features_train_list[single_layer_index])
+                                np.save(val_features_file_path, features_val_list[single_layer_index])
+                                np.save(test_features_file_path, features_test_list[single_layer_index])               
+                        # concatenate the features from the different layers
+                        features_train = np.hstack(features_train_list)
+                        features_val = np.hstack(features_val_list)
+                        features_test = np.hstack(features_test_list)
+                    del model, feature_extractor, pca, train_imgs_dataloader, val_imgs_dataloader, test_imgs_dataloader  # elimino dalla ram
+                    del features_train_list, features_val_list, features_test_list
+                    torch.cuda.empty_cache() # elimino la chache vram
+                    gc.collect() # elimino la cache ram
+                        
                 ## Fit the linear model ##
                 print('\n ## Fit Encoder and Predict...')
                 lh_fmri_train, lh_fmri_val, rh_fmri_train, rh_fmri_val = data_loaders.fmri_splitter()
