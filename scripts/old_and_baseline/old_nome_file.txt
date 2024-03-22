@@ -1,3 +1,0 @@
-ROI1 Left: 0.75
-ROI2 Right: 0.80
-ROI3 Left: 0.85
