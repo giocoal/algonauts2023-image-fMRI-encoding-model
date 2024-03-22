@@ -1,0 +1,8 @@
+subj01 finished in 2.1985604763031006 seconds
+subj02 finished in 2.187154769897461 seconds
+subj03 finished in 2.321671724319458 seconds
+subj04 finished in 2.443946361541748 seconds
+subj05 finished in 2.1988413333892822 seconds
+subj06 finished in 2.294797658920288 seconds
+subj07 finished in 2.1763312816619873 seconds
+subj08 finished in 2.444335699081421 seconds

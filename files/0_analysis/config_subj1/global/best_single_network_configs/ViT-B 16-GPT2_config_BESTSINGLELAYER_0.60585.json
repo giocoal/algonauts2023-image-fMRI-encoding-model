@@ -1,0 +1,289 @@
+{
+    "V1v": [
+        "ViT_GPT2",
+        "encoder.5",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "V1d": [
+        "ViT_GPT2",
+        "encoder.5",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "V2v": [
+        "ViT_GPT2",
+        "encoder.5",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "V2d": [
+        "ViT_GPT2",
+        "encoder.5",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "V3v": [
+        "ViT_GPT2",
+        "encoder.5",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "V3d": [
+        "ViT_GPT2",
+        "encoder.5",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "hV4": [
+        "ViT_GPT2",
+        "encoder.5",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "EBA": [
+        "ViT_GPT2",
+        "encoder.10",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "FBA-1": [
+        "ViT_GPT2",
+        "encoder.9",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "FBA-2": [
+        "ViT_GPT2",
+        [
+            "encoder.9",
+            "decoder.9"
+        ],
+        "ViT_GPT2_transform",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "mTL-bodies": NaN,
+    "OFA": [
+        "ViT_GPT2",
+        "encoder.5",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "FFA-1": [
+        "ViT_GPT2",
+        [
+            "encoder.6",
+            "encoder.6",
+            "encoder.8",
+            "encoder.9"
+        ],
+        "ViT_GPT2_transform",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "FFA-2": [
+        "ViT_GPT2",
+        [
+            "encoder.9",
+            "encoder.10",
+            "encoder.11",
+            "encoder.12"
+        ],
+        "ViT_GPT2_transform",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "mTL-faces": NaN,
+    "aTL-faces": NaN,
+    "OPA": [
+        "ViT_GPT2",
+        "encoder.9",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "PPA": [
+        "ViT_GPT2",
+        [
+            "encoder.9",
+            "decoder.9"
+        ],
+        "ViT_GPT2_transform",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "RSC": [
+        "ViT_GPT2",
+        "encoder.10",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "OWFA": [
+        "ViT_GPT2",
+        "encoder.5",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "VWFA-1": [
+        "ViT_GPT2",
+        "encoder.9",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "VWFA-2": [
+        "ViT_GPT2",
+        "encoder.10",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "mfs-words": [
+        "ViT_GPT2",
+        [
+            "encoder.6",
+            "encoder.6",
+            "encoder.8",
+            "encoder.9"
+        ],
+        "ViT_GPT2_transform",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "mTL-words": NaN,
+    "early": [
+        "ViT_GPT2",
+        "encoder.5",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "midventral": [
+        "ViT_GPT2",
+        "encoder.5",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "midlateral": [
+        "ViT_GPT2",
+        "encoder.5",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "midparietal": [
+        "ViT_GPT2",
+        "encoder.8",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "ventral": [
+        "ViT_GPT2",
+        [
+            "encoder.9",
+            "decoder.9"
+        ],
+        "ViT_GPT2_transform",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "lateral": [
+        "ViT_GPT2",
+        [
+            "encoder.9",
+            "decoder.9"
+        ],
+        "ViT_GPT2_transform",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "parietal": [
+        "ViT_GPT2",
+        "encoder.8",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "All vertices": [
+        "ViT_GPT2",
+        [
+            "encoder.6",
+            "encoder.6",
+            "encoder.8",
+            "encoder.9"
+        ],
+        "ViT_GPT2_transform",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "Unknown ROI": [
+        "ViT_GPT2",
+        "encoder.8",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "Unknown Stream": [
+        "ViT_GPT2",
+        "encoder.5",
+        "ViT_GPT2_transform",
+        "ridge",
+        "2048",
+        "pca_concat"
+    ],
+    "Unknown": [
+        "ViT_GPT2",
+        [
+            "encoder.9",
+            "decoder.9"
+        ],
+        "ViT_GPT2_transform",
+        "ridge",
+        "512",
+        "pca_concat"
+    ]
+}

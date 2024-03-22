@@ -1,0 +1,357 @@
+{
+    "V1v": [
+        "RetinaNet",
+        [
+            "body.layer2.3.relu_2",
+            "body.layer3.5.relu_2",
+            "body.layer4.2.relu_2",
+            "fpn"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "V1d": [
+        "RetinaNet",
+        [
+            "body.layer2.3.relu_2",
+            "body.layer3.5.relu_2",
+            "body.layer4.2.relu_2",
+            "fpn"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "V2v": [
+        "RetinaNet",
+        [
+            "body.layer2.3.relu_2",
+            "body.layer3.5.relu_2",
+            "body.layer4.2.relu_2",
+            "fpn"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "V2d": [
+        "RetinaNet",
+        [
+            "body.layer3.0.relu_2",
+            "body.layer3.1.relu_2",
+            "body.layer3.2.relu_2",
+            "body.layer3.3.relu_2",
+            "body.layer3.4.relu_2",
+            "body.layer3.5.relu_2"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "V3v": [
+        "RetinaNet",
+        [
+            "body.layer2.3.relu_2",
+            "body.layer3.5.relu_2",
+            "body.layer4.2.relu_2",
+            "fpn"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "V3d": [
+        "RetinaNet",
+        [
+            "body.layer2.3.relu_2",
+            "body.layer3.5.relu_2",
+            "body.layer4.2.relu_2",
+            "fpn"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "hV4": [
+        "RetinaNet",
+        "body.layer3.5.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "EBA": [
+        "RetinaNet",
+        "body.layer4.2.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "FBA-1": [
+        "RetinaNet",
+        [
+            "body.layer4.0.relu_2",
+            "body.layer4.1.relu_2",
+            "body.layer4.2.relu_2"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "FBA-2": [
+        "RetinaNet",
+        "body.layer4.2.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "mTL-bodies": NaN,
+    "OFA": [
+        "RetinaNet",
+        [
+            "body.layer2.3.relu_2",
+            "body.layer3.5.relu_2",
+            "body.layer4.2.relu_2",
+            "fpn"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "FFA-1": [
+        "RetinaNet",
+        [
+            "body.layer4.0.relu_2",
+            "body.layer4.1.relu_2",
+            "body.layer4.2.relu_2"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "FFA-2": [
+        "RetinaNet",
+        "body.layer4.2.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "mTL-faces": NaN,
+    "aTL-faces": NaN,
+    "OPA": [
+        "RetinaNet",
+        [
+            "body.layer4.0.relu_2",
+            "body.layer4.1.relu_2",
+            "body.layer4.2.relu_2"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "PPA": [
+        "RetinaNet",
+        "body.layer4.2.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "RSC": [
+        "RetinaNet",
+        "body.layer4.2.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "OWFA": [
+        "RetinaNet",
+        [
+            "body.layer2.3.relu_2",
+            "body.layer3.5.relu_2",
+            "body.layer4.2.relu_2",
+            "fpn"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "VWFA-1": [
+        "RetinaNet",
+        [
+            "body.layer4.0.relu_2",
+            "body.layer4.1.relu_2",
+            "body.layer4.2.relu_2"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "VWFA-2": [
+        "RetinaNet",
+        "body.layer4.2.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "mfs-words": [
+        "RetinaNet",
+        [
+            "body.layer4.0.relu_2",
+            "body.layer4.1.relu_2",
+            "body.layer4.2.relu_2"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "mTL-words": NaN,
+    "early": [
+        "RetinaNet",
+        [
+            "body.layer2.3.relu_2",
+            "body.layer3.5.relu_2",
+            "body.layer4.2.relu_2",
+            "fpn"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "midventral": [
+        "RetinaNet",
+        [
+            "body.layer2.3.relu_2",
+            "body.layer3.5.relu_2",
+            "body.layer4.2.relu_2",
+            "fpn"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "midlateral": [
+        "RetinaNet",
+        [
+            "body.layer2.3.relu_2",
+            "body.layer3.5.relu_2",
+            "body.layer4.2.relu_2",
+            "fpn"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "midparietal": [
+        "RetinaNet",
+        [
+            "body.layer4.0.relu_2",
+            "body.layer4.1.relu_2",
+            "body.layer4.2.relu_2"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "ventral": [
+        "RetinaNet",
+        [
+            "body.layer4.0.relu_2",
+            "body.layer4.1.relu_2",
+            "body.layer4.2.relu_2"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "lateral": [
+        "RetinaNet",
+        "body.layer4.2.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "parietal": [
+        "RetinaNet",
+        [
+            "body.layer4.0.relu_2",
+            "body.layer4.1.relu_2",
+            "body.layer4.2.relu_2"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "All vertices": [
+        "RetinaNet",
+        [
+            "body.layer2.3.relu_2",
+            "body.layer3.5.relu_2",
+            "body.layer4.2.relu_2",
+            "fpn"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "Unknown ROI": [
+        "RetinaNet",
+        [
+            "body.layer4.0.relu_2",
+            "body.layer4.1.relu_2",
+            "body.layer4.2.relu_2"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "Unknown Stream": [
+        "RetinaNet",
+        [
+            "body.layer2.3.relu_2",
+            "body.layer3.5.relu_2",
+            "body.layer4.2.relu_2",
+            "fpn"
+        ],
+        "imagenet_transform_alt",
+        "ridge",
+        "512",
+        "pca_concat"
+    ],
+    "Unknown": [
+        "RetinaNet",
+        "body.layer4.2.relu_2",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ]
+}

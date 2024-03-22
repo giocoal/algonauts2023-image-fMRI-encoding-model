@@ -1,0 +1,254 @@
+{
+    "V1v": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "V1d": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "V2v": [
+        "vgg19",
+        "features.33",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "V2d": [
+        "vgg19",
+        "features.33",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "V3v": [
+        "vgg19",
+        "features.33",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "V3d": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "hV4": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "EBA": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "FBA-1": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "FBA-2": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "mTL-bodies": NaN,
+    "OFA": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "FFA-1": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "FFA-2": [
+        "vgg19",
+        "avgpool",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "mTL-faces": NaN,
+    "aTL-faces": NaN,
+    "OPA": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "PPA": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "RSC": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "OWFA": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "VWFA-1": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "VWFA-2": [
+        "vgg19",
+        "features.35",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "mfs-words": [
+        "vgg19",
+        "features.35",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "mTL-words": NaN,
+    "early": [
+        "vgg19",
+        "features.33",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "midventral": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "midlateral": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "midparietal": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "ventral": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "lateral": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "parietal": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "All vertices": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "Unknown ROI": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "Unknown Stream": [
+        "vgg19",
+        "features.33",
+        "imagenet_transform_alt",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ],
+    "Unknown": [
+        "vgg19",
+        "features.33",
+        "imagenet_V2_transform",
+        "ridge",
+        "2048",
+        "concat_pca"
+    ]
+}

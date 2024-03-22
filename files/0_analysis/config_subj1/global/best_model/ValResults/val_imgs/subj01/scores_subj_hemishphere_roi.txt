@@ -1,0 +1,70 @@
+V1v Left: 0.73
+V1d Left: 0.77
+V2v Left: 0.69
+V2d Left: 0.70
+V3v Left: 0.68
+V3d Left: 0.63
+hV4 Left: 0.62
+EBA Left: 0.70
+FBA-1 Left: 0.72
+FBA-2 Left: nan
+mTL-bodies Left: nan
+OFA Left: 0.60
+FFA-1 Left: 0.74
+FFA-2 Left: nan
+mTL-faces Left: nan
+aTL-faces Left: nan
+OPA Left: 0.65
+PPA Left: 0.76
+RSC Left: 0.87
+OWFA Left: 0.60
+VWFA-1 Left: 0.51
+VWFA-2 Left: 0.59
+mfs-words Left: 0.54
+mTL-words Left: nan
+early Left: 0.63
+midventral Left: 0.63
+midlateral Left: 0.56
+midparietal Left: 0.63
+ventral Left: 0.65
+lateral Left: 0.70
+parietal Left: 0.58
+All vertices Left: 0.64
+Unknown ROI Left: 0.58
+Unknown Stream Left: 0.66
+Unknown Left: 0.79
+V1v Right: 0.71
+V1d Right: 0.69
+V2v Right: 0.71
+V2d Right: 0.71
+V3v Right: 0.67
+V3d Right: 0.63
+hV4 Right: 0.60
+EBA Right: 0.69
+FBA-1 Right: 0.59
+FBA-2 Right: 0.78
+mTL-bodies Right: nan
+OFA Right: 0.58
+FFA-1 Right: 0.75
+FFA-2 Right: 0.80
+mTL-faces Right: nan
+aTL-faces Right: nan
+OPA Right: 0.61
+PPA Right: 0.78
+RSC Right: 0.88
+OWFA Right: 0.57
+VWFA-1 Right: 0.59
+VWFA-2 Right: 0.46
+mfs-words Right: nan
+mTL-words Right: nan
+early Right: 0.64
+midventral Right: 0.61
+midlateral Right: 0.60
+midparietal Right: 0.58
+ventral Right: 0.67
+lateral Right: 0.69
+parietal Right: 0.52
+All vertices Right: 0.64
+Unknown ROI Right: 0.58
+Unknown Stream Right: 0.67
+Unknown Right: 0.70

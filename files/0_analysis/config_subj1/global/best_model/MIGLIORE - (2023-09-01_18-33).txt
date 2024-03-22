@@ -1,0 +1,5 @@
+MIGLIORE:
+- (2023-09-01_18-33)1_1_config_0.65567.json_2_2_config_0.63208.json_3_3_config_0.65337.json_4_4_config_0.67977.json_5_5_config_0.66019.json_6_6_config_0.55831.json_7_7_config_0.57815.json_8_8_config_0.59902.json
+
+QUELLO DELLE IMMAGINI:
+- 1_config_0.64732_2_config_0.61784_3_config_0.64438_4_config_0.67311_5_config_0.65844_6_config_0.55162_7_config_0.57405_8_config_0.59776
