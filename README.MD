@@ -32,14 +32,14 @@ The main objective of this thesis is to develop a comprehensive *voxel-based* an
 We applied a two-step *linearizing* strategy to visual encoding, based on the use of two separate computational models respectively for the non-linear *feature mapping* (employing pre-trained computer vision DNNs as feature extractors) of the stimulus image into its latent representations and the subsequent linear *activity mapping* of the visual features into the BOLD response amplitudes of the individual voxels, using Principal Component Analysis (PCA) to reduce the dimensionality of the visual features and independent *ridge regression* models to map the PCA components in the activity of each voxel. 
 
 <p align="center">
-<img src="imgs/Picture1.png" width="80%" />
+<img src="imgs/Picture1.png" width="100%" />
 
 </p>
 
 Furthermore, in order to meet the criteria of *mappability* and *predictivity* that characterize a good encoding model, we adopted a *ROI-wise* and *mixed* encoding strategy, modeling the encoding of voxels belonging to different *regions of interest* (ROIs, groups of voxels that share functional properties) separately to achieve maximum accuracy across the entire visual cortex and within individual ROIs. To determine the best feature mapping method for each region of interest, we tested the extraction of visual features from layers at varying depths of several pre-trained Convolutional Neural Networks (AlexNet, ZFNet, RetinaNet, EfficientNet-B2, VGG-16, VGG-19) and Vision Transformers (ViTs), characterized by different training parameters (training goal, training dataset, and learning method). During this testing phase, the existence of similarity and functional alignment between the hierarchical architecture of the pre-trained DNNs and the structure of the visual cortex emerged, a result that motivated the use of the ROI-wise strategy.
 
 <p align="center">
-<img src="imgs/Picture2.png" width="80%" />
+<img src="imgs/Picture2.png" width="100%" />
 
 </p>
 
