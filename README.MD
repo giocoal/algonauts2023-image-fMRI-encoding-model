@@ -1,8 +1,7 @@
 ## Code for the Master's Thesis "Deep Neural Encoding Models of the Human Visual Cortex to Predict fMRI Responses to Natural Visual Scenes".
 ### Research Internship - MSc in Data Science - University of Milano-Bicocca - Imaging and Vision Laboratory.
 
-This is a repository for [Algonauts2023 competition](http://algonauts.csail.mit.edu).  
-Developed by [@giocoal](https://github.com/giocoal)
+This is a repository for my submission for the [Algonauts Project 2023 Challenge](http://algonauts.csail.mit.edu) (id: giorgiocarbone).
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
